@@ -1,0 +1,106 @@
+#===============================================================================
+# Name   : Imagery renaming
+# Author : Filippo Ferrario
+# Date   : 09/12/2020 
+# Version: 0.1
+# Aim	 : rename files based on the strucure of the folder tree in which they are organized.
+# 		   Originally developed to rename imagery files acquired in mapping projects.
+#          The files are usually taken with different lev2eras and saved in a sub folder named as the lev2era ID (as unique as possible) whitin a folder of the transect.
+# 		   Thus, so far the function works correctely only for a structure of folders with 2 levels:
+#			- first level is typically grouping different lev2eras (e.g., a transect, a DAY-SHOOTING_SESSION)
+# 			- second level is typically a folder corrsponding to a lev2era AND contains only imagery files to be renamed.
+#		   
+#		   For pictures:
+# 		   In case the a camera record the same image in multiple formats (e.g., JPG and RAW), the name of the files corresponding to the same shot will only differ by the format.
+#		   In this case, if a sequential number is to be given, numbering must reflect the sequence of images in each format in the same way.
+#		   While cameras already use a file naming system that is sequential in some way, adding a specific sequential tag can ease processing and avoid cases when the camera numbering system skips some digits. 
+#          For examples GoPros time lapse will use only 4 digits sequential ID, so that when reaching 9999 the next picture is 0001. 
+#
+#		   For videos:
+#		   sequential Id is never added since usually video
+#===============================================================================
+
+
+
+#' @param imagery_path character. Path to the folder containing imagery data. Ideally this folder contains one subfolder for each transect to be mosaiced.
+#' @param lev2_ignore character vector of names of folders (or files) within the subfolder of a transect which do not contain imagery data and should therefore be ignored. Ideally these elements are constant for each transect.
+#' @param img_format character vector specifying in which formats the image files could be provided. List all formats that are being used in the project.
+#' @param vid_format character vector specifying in which formats the video files could be provided. List all formats that are being used in the project.
+#' @param add_seq logical. If TRUE (default) a sequential number is added at the end of the name, before the format extension, for each format type. 
+
+
+imgRename<-function(imagery_path=NULL, lev2_ignore=c('fit'), img_format=c('png','jpg'), vid_format=c('mp4') , add_seq=T)
+{ #browser()
+	# check params
+	if (!is.character(imagery_path)) stop('enter the path to the folder containing the imagery')
+	if (!is.logical(add_seq)) stop('add_seq must be T or F')	
+	# # retrive names of the transect subfolders
+	# lev1_names<-list.dirs(imagery_path,recursive=F, full.names=F)
+	
+	# # limit the function to folder branches with only 2 levels.
+	# {
+	levs<-list.dirs(imagery_path,recursive=T, full.names=F)
+	lev2<-grep(levs, pattern="^[^/]+/[^/]+$", value=TRUE)
+	lev2plus<-grep(levs, pattern="/", value=TRUE)
+	lev3plus<-lev2plus[!lev2plus %in% lev2]
+	lent<-sapply(lev2, function(x) sum(grepl(lev3plus, pattern=paste0('^',x)) ) )
+	paths2use<-names(lent[lent==0])
+
+	# }
+
+
+	formats<-c(img_format,vid_format)
+
+	for (i in 1: length(paths2use)) {
+		# get the name of the level 1 (e.g., transet)
+		lev1_tag<-strsplit(paths2use[i], split='/')[[1]][1]
+		# get the names of the level 2 (e.g, a camera) within level 1 excluding the lev2_ignore folder/files
+		lev2_tag<-strsplit(paths2use[i], split='/')[[1]][2]
+		if ( sum(lev2_tag %in% lev2_ignore) ==0) {
+			tmp_path<-paste0(imagery_path,'/',lev1_tag,'/',lev2_tag)
+			# get names of the files in the level 2 folder
+			imgr_names<-list.files(tmp_path,recursive=F, full.names=F )
+			# select only accepted imagery formats
+			form_patt<-paste0('\\.',tolower(formats), collapse='|')
+			imgr_names_indx<- grepl(tolower(imgr_names), pattern=form_patt)
+			# imagery names (including videos)
+			imgr_names<-imgr_names[imgr_names_indx]
+							
+			if (add_seq==T) { 
+				# identify which are photos
+				pics<-grepl(imgr_names, pattern=paste0('\\.',img_format, collapse='|'))
+				pics_names_comp<-strsplit(imgr_names[pics],split='\\.')
+				pics_names<-sapply(pics_names_comp, function(x) x[1])
+				pics_formt<-sapply(pics_names_comp, function(x) x[2])
+				# identify which and ho many picture files have the same name excluding the format (i.e., are the same picture)
+				x<-rle(sapply(pics_names_comp, function(x) x[1]))
+				# create ID vector
+				pics_seq_ID<-rep(1:length(x$lengths),x$lengths)
+				# add ID to base name
+				pics_names_seq<-paste0(pics_names,'-',pics_seq_ID,'.',pics_formt)
+				# replace pics with sequential ID in vector imgr_names
+				imgr_names_seq<-imgr_names
+				imgr_names_seq[pics]<-pics_names_seq
+				name_tag<-paste0(lev1_tag,'-',lev2_tag,'-',imgr_names_seq)
+				} else {
+					name_tag<-paste0(lev1_tag,'-',lev2_tag,'-',imgr_names)
+					}
+			file.rename(from=paste0(tmp_path,'/',imgr_names), to=paste0(tmp_path,'/',name_tag))
+		}
+	}
+
+
+
+}
+
+
+# bench
+# ---------
+
+# imagery_path<-'F:/PPO_godbout/img_test'
+# 
+# imgRename(imagery_path='F:/PPO_godbout/imagery')
+
+# imgRename(imagery_path='C:/Users/Utilisateur/Desktop/prova',img_format=c('txt','bmp'), vid_format=c('docx'), lev2_ignore='rtf', add_seq=T)
+
+
