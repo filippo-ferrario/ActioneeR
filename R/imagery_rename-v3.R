@@ -24,7 +24,14 @@
 #===============================================================================
 
 
-
+#' Rename files based on the strucure of the folder tree in which they are organized.
+#' 
+#' Originally developed to rename imagery files acquired in mapping projects. 
+#' The files are usually taken with different cameras and saved in subfolders named as the camera ID (as unique as possible) whitin a folder-tree organized to reflect shooting strategy (e.g., transects, DAY-SHOOTING_SESSION, cameras settings).  
+#'		   Some common structures include:	
+#' 			- first level is typically grouping different cameras (e.g., a transect, a DAY-SHOOTING_SESSION)
+#' 			- second level is typically a folder corrsponding to a camera AND contains only imagery files to be renamed.
+#' 
 #' @param imagery_path character. Path to the folder containing imagery data. Ideally this folder contains one subfolder for each transect to be mosaiced.
 #' @param ignore_lev1 character vector of names of subfolders at level 1 that should not be processed. to be used in particular avoid problems arising in cases when no folders with more levels than needed are present and some of these should be ignored) 
 #' @param ignore_nested character vector of names of subfolders that should be ignored INSIDE the desired level to be processed. Ideally these elements are constant throughout the folder tree and not named as other levels. if "ignore" is NULL, any folder of the desired level which contain a subfolder will be skipped since it will be considered of an undesired level.
@@ -32,6 +39,21 @@
 #' @param vid_format character vector (case insensitive) specifying in which formats the video files could be provided. List all formats that are being used in the project. Any format not specified will not be considered. Formats are case insensitive: formats differing only in case will be treated as the same format (i.e., "jpg" == "JPG")
 #' @param add_seq logical. If TRUE (default) a sequential number is added at the end of the name, before the format extension, for each format type. 
 #' @param n_lev numeric. Number specifying the number of levels (branch) of the path that need to be processed. Only paths with the specified number of levels will be processed.
+#' 
+#' @details
+#' - For pictures:
+#' 		   In case the a camera record the same image in multiple formats (e.g., JPG and RAW), the name of the files corresponding to the same shot will only differ by the format.
+#'		   In this case, if a sequential number is to be given, numbering must reflect the sequence of images in each format in the same way.
+#'		   While cameras already use a file naming system that is sequential in some way, adding a specific sequential tag can ease processing and avoid cases when the camera numbering system skips some digits. 
+#'          For examples GoPros time lapse will use only 4 digits sequential ID, so that when reaching 9999 the next picture is 0001. 
+#' - For videos:
+#'		   sequential Id is never added since usually video
+#' 
+#' @author Filippo Ferrario, \email{filippo.f3rrario@gmail.com} 
+#' 
+#' 
+#' 
+#' @export 
 
 
 imgRename<-function(imagery_path=NULL, n_lev=NULL, ignore_lev1=NULL,ignore_nested=c('fit'), img_format=c('png','jpg'), vid_format=c('mp4') , add_seq=T)
@@ -147,3 +169,7 @@ imgRename<-function(imagery_path=NULL, n_lev=NULL, ignore_lev1=NULL,ignore_neste
 # 			vid_format=c('docx'), 
 # 			add_seq=T
 # 			)
+
+# example of used code
+# Rename time lapse folders
+# imgRename(imagery_path='G:/Godbout-60x60_mosaic/data', n_lev=3, ignore_lev1=c('calib.files'), ignore_nested=c('dive_1-aborted','colorcorrected-JL'), img_format=c('jpg','gpr','dng'), vid_format=c('mp4') , add_seq=T)
