@@ -18,10 +18,12 @@
 #' 
 #' @param source absolute or relative path to the folder/drive where the files are stored (e.g., an SD )
 #' @param dest absolute path to where the files need to be copied
-#' @param formats a character vector spcifying which format of file should be considered. Case insensitive
+#' @param img_format character vector (case insensitive) specifying in which formats the image files could be provided. List all formats that are being used in the project. Any format not specified will not be considered. Formats are case insensitive: formats differing only in case will be treated as the same format (i.e., "jpg" == "JPG")
+#' @param vid_format character vector (case insensitive) specifying in which formats the video files could be provided. List all formats that are being used in the project. Any format not specified will not be considered. Formats are case insensitive: formats differing only in case will be treated as the same format (i.e., "mp4" == "MP4")
 #' @param name_levs numeric, given the path of `dest`, it specify the last N levels of the path to be used in renaming a file (e.g., with dest= c:/lev1/lev2/lev3/lev4 and names_levs=2 then lev3 and lev4 will be used in the name)
 #' @param rename logical. Default to TRUE means that the copied files will also be renamed.
 #' @param sep character use to separate the different components of the file name
+#' @param add_seq logical. If TRUE (default) a sequential number is added at the end of the name, before the format extension, for each format type. 
 #' @param prefix (optional) a string to be attaced to the beginning of the file name
 #' @param from_file name of the first file of those in the interval to be copied (and renamed). See [details]
 #' @param to_file name of the last file file of those in the interval to be copied (and renamed). See [details]
@@ -45,8 +47,10 @@
 #' 
 #' @export
 
-cam2disk<-function(source=NULL, dest=NULL, formats=c('jpg','gpr','mp4'), 
-					names_levs=3, rename=TRUE,sep='-', prefix=NULL,
+cam2disk<-function(source=NULL, dest=NULL, 
+					# formats=c('jpg','gpr','mp4'), 
+					img_format=c('png','jpg','gpr'), vid_format=c('mp4'),
+					names_levs=3, rename=TRUE,sep='-', prefix=NULL, add_seq=TRUE,
 					from_file=NULL, to_file=NULL, 
 					from_daytime=NULL, to_daytime=NULL, time_format='%Y:%m:%d %H:%M:%S')
 {
@@ -54,7 +58,8 @@ cam2disk<-function(source=NULL, dest=NULL, formats=c('jpg','gpr','mp4'),
 	# ---------------------
 	if (!is.character(source)) stop('source must be a character')
 	if (!is.character(dest)) stop('dest must be a character')
-	if (!is.character(formats)) stop('formats must be a character')
+	if (!is.null(img_format) & !is.character(img_format)) stop('img_format must be a character')
+	if (!is.null(vid_format) & !is.character(vid_format)) stop('vid_format must be a character')
 	if (!is.numeric(names_levs)) stop('names_levs must be a number')
 	if (rename==TRUE & !is.character(sep)) stop('sep must be a character')
 	if (!is.null(prefix) & !is.character(prefix)) stop('prefix must be a character')
@@ -64,13 +69,13 @@ cam2disk<-function(source=NULL, dest=NULL, formats=c('jpg','gpr','mp4'),
 	if (!is.null(to_daytime) & !is.character(to_daytime)) stop('to_daytime must be a character')
 	if (!is.null(from_daytime) & !is.character(time_format)) stop('time_format must be a character')
 
-	# # set working directory to the source 
-	# oldwd<-getwd()
-	# if (getwd()!=source) setwd(source)
-
 
 	# make formats case insensitive
-	formats<-c(tolower(formats),toupper(formats))
+	
+	img_format<-c(tolower(img_format),toupper(img_format))
+	vid_format<-c(tolower(vid_format),toupper(vid_format))
+	formats<-c(img_format,vid_format)
+
 	form_patt<-paste0('\\.',formats, collapse='|')
 	# obtain the list of paths of the files with specified pattern 
 	flst<-list.files(source, recursive=T, pattern=form_patt)
@@ -88,7 +93,6 @@ cam2disk<-function(source=NULL, dest=NULL, formats=c('jpg','gpr','mp4'),
 		meta_name<-tolower(meta$FileName)
 		rowid<-which(grepl(meta_name, pattern=paste0(from_file,'|',to_file)))
 		if (length(rowid)<2) {
-			setwd(oldwd) 
 			stop('less than 2 names matching!')
 		}
 		if (length(rowid)>2) {
@@ -106,7 +110,6 @@ cam2disk<-function(source=NULL, dest=NULL, formats=c('jpg','gpr','mp4'),
 		t1<-as.POSIXct(strptime(from_daytime, format=time_format))
 		t2<-as.POSIXct(strptime(to_daytime, format=time_format))
 		if (is.na(t1)| is.na(t2)) {
-				setwd(oldwd) 
 				stop('provided daytime argument not in the format of time_format!')
 			}
 		# select file to copy based on time
@@ -121,11 +124,6 @@ cam2disk<-function(source=NULL, dest=NULL, formats=c('jpg','gpr','mp4'),
 	dir.create(dest, recursive=TRUE)
 	# get original name of the file
 	orig<-sub_meta$FileName
-	# orig<-lapply(sub_meta$SourceFile, function(x) {
-	# 								comp<-unlist(strsplit(x, split='/'))
-	# 								comp[grepl(comp, pattern=form_patt)]
-	# 								} )
-	# orig<-unlist(orig)
 	# Copy (and optionally rename) files
 	if (rename==TRUE){
 		# Prepare the file name
@@ -136,13 +134,31 @@ cam2disk<-function(source=NULL, dest=NULL, formats=c('jpg','gpr','mp4'),
 		hier_levs<-length(tree_levs)
 		name_tag<- paste0(tree_levs[(hier_levs-names_levs+1):length(tree_levs)], collapse=sep)
 
-		# final name
-		if (is.null(prefix)) 
-			{
-			finname<-paste(name_tag,orig, sep=sep) 
-		} else {
-			finname<-paste(prefix,name_tag,orig, sep=sep) 
+		finname<-paste(name_tag,orig, sep=sep) 
+		# add prefix
+		if (!is.null(prefix)) finname<-paste(prefix,finname, sep=sep) 
+		# add sequential number to still images
+		if (add_seq==T) {
+			# identify which are photos
+			pics<-grepl(finname, pattern=paste0('\\.',img_format, collapse='|'))
+			# need to check that there are images. If there are only videos the rle function return an epty list causing an error.
+				if (sum(pics)>0){
+								pics_names_comp<-strsplit(finname[pics],split='\\.')
+								pics_names<-sapply(pics_names_comp, function(x) x[1])
+								pics_formt<-sapply(pics_names_comp, function(x) x[2])
+								# identify which and how many picture files have the same name excluding the format (i.e., are the same picture)
+								x<-rle(sapply(pics_names_comp, function(x) x[1]))
+								# create ID vector
+								pics_seq_ID<-rep(1:length(x$lengths),x$lengths)
+								# add ID to base name
+								pics_names_seq<-paste0(pics_names,sep,pics_seq_ID,'.',pics_formt)
+								# replace pics with sequential ID in vector finname
+								# finname_seq<-finname
+								finname[pics]<-pics_names_seq
+							}
 		}
+
+
 		# copy and rename
 		file.copy(sub_meta$SourceFile, paste0(dest,'/',finname),copy.date=TRUE)
 	} else {
@@ -156,8 +172,6 @@ cam2disk<-function(source=NULL, dest=NULL, formats=c('jpg','gpr','mp4'),
     log_out<-sub_meta[,c(235,1:29,82,83)]
 	# sub_meta$ModifyDate<-as.character(sub_meta$ModifyDate)
 	write.table(log_out, file=paste0(dest,'/log_copy.txt'), sep='\t',quote=TRUE, row.names=FALSE)
-	# reset working directory
-	# setwd(oldwd)
 	alarm()
 			
 }
@@ -169,19 +183,24 @@ cam2disk<-function(source=NULL, dest=NULL, formats=c('jpg','gpr','mp4'),
 # =======================================
 
 # source<-'C:/Users/ferrariof/Documents/GitHub/ActioneeR/data'
-# dest='C:/Users/ferrariof/Desktop/TL_05s/20220601-test/gp10-names'
-# formats=c('jpg','gpr','mp4')
-# from_daytime='06/01/2022 10:38'
-# to_daytime='06/01/2022 10:40'
+# dest='C:/Users/ferrariof/Desktop/TL_05s/20220601-test/gp10-seq'
+# # formats=c('jpg','gpr','mp4')
+# img_format=c('png','jpg','gpr')
+# vid_format=c('mp4')
+# from_daytime='10/19/2021 11:50'
+# to_daytime='06/01/2022 12:40'
 # time_format='%m/%d/%Y %H:%M'
 # names_levs=3
-# rename=F
+# rename=TRUE
 # sep='-'
 # prefix=NULL
-# from_file='G0020009'
-# to_file='G0031996'
+# add_seq=TRUE
+# from_file=NULL
+# to_file=NULL
+# # from_file='G0020009'
+# # to_file='G0031996'
 
-# dplyr::select(meta, SourceFile, contains('Date'))
+# # dplyr::select(meta, SourceFile, contains('Date'))
 
 # range(sub_meta$ModifyDate)
 
@@ -224,3 +243,11 @@ cam2disk<-function(source=NULL, dest=NULL, formats=c('jpg','gpr','mp4'),
 # 		names_levs=3, rename=F,sep='-', prefix=NULL,
 # 		# from_file='G0020009', to_file='G0031996', 
 # 		from_daytime='06/01/2022 10:38', to_daytime='06/01/2022 12:00', time_format='%m/%d/%Y %H:%M')
+
+# only copy ; only times = sequential
+cam2disk(source='GitHub/ActioneeR/data/DCIM-gopro', dest='C:/Users/ferrariof/Desktop/TL_05s/20220601-test/gp10-time-copy_only', 
+		img_format=c('png','jpg','gpr'), vid_format=c('mp4'),
+		names_levs=3, rename=F, sep='-', prefix=NULL,
+		# from_file='G0020009', to_file='G0031996', 
+		add_seq=TRUE,
+		from_daytime='10/19/2021 11:50', to_daytime='06/01/2022 12:00', time_format='%m/%d/%Y %H:%M')
