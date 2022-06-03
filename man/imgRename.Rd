@@ -44,7 +44,7 @@ In this case, if a sequential number is to be given, numbering must reflect the 
 While cameras already use a file naming system that is sequential in some way, adding a specific sequential tag can ease processing and avoid cases when the camera numbering system skips some digits.
 For examples GoPros time lapse will use only 4 digits sequential ID, so that when reaching 9999 the next picture is 0001.
 \item For videos:
-sequential Id is never added since usually video
+sequential Id is never added since usually videos are not generated in different formats with the same file name.
 }
 }
 \author{

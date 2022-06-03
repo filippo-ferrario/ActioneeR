@@ -7,11 +7,13 @@
 cam2disk(
   source = NULL,
   dest = NULL,
-  formats = c("jpg", "gpr", "mp4"),
+  img_format = c("png", "jpg", "gpr"),
+  vid_format = c("mp4"),
   names_levs = 3,
   rename = TRUE,
   sep = "-",
   prefix = NULL,
+  add_seq = TRUE,
   from_file = NULL,
   to_file = NULL,
   from_daytime = NULL,
@@ -24,13 +26,17 @@ cam2disk(
 
 \item{dest}{absolute path to where the files need to be copied}
 
-\item{formats}{a character vector spcifying which format of file should be considered. Case insensitive}
+\item{img_format}{character vector (case insensitive) specifying in which formats the image files could be provided. List all formats that are being used in the project. Any format not specified will not be considered. Formats are case insensitive: formats differing only in case will be treated as the same format (i.e., "jpg" == "JPG")}
+
+\item{vid_format}{character vector (case insensitive) specifying in which formats the video files could be provided. List all formats that are being used in the project. Any format not specified will not be considered. Formats are case insensitive: formats differing only in case will be treated as the same format (i.e., "mp4" == "MP4")}
 
 \item{rename}{logical. Default to TRUE means that the copied files will also be renamed.}
 
 \item{sep}{character use to separate the different components of the file name}
 
 \item{prefix}{(optional) a string to be attaced to the beginning of the file name}
+
+\item{add_seq}{logical. If TRUE (default) a sequential number is added at the end of the name, before the format extension, for each format type.}
 
 \item{from_file}{name of the first file of those in the interval to be copied (and renamed). See \link{details}}
 
