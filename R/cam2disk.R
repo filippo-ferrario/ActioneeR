@@ -244,10 +244,10 @@ cam2disk<-function(source=NULL, dest=NULL,
 # 		# from_file='G0020009', to_file='G0031996', 
 # 		from_daytime='06/01/2022 10:38', to_daytime='06/01/2022 12:00', time_format='%m/%d/%Y %H:%M')
 
-# only copy ; only times = sequential
-cam2disk(source='GitHub/ActioneeR/data/DCIM-gopro', dest='C:/Users/ferrariof/Desktop/TL_05s/20220601-test/gp10-time-copy_only', 
-		img_format=c('png','jpg','gpr'), vid_format=c('mp4'),
-		names_levs=3, rename=F, sep='-', prefix=NULL,
-		# from_file='G0020009', to_file='G0031996', 
-		add_seq=TRUE,
-		from_daytime='10/19/2021 11:50', to_daytime='06/01/2022 12:00', time_format='%m/%d/%Y %H:%M')
+# # only copy ; only times = sequential
+# cam2disk(source='GitHub/ActioneeR/data/DCIM-gopro', dest='C:/Users/ferrariof/Desktop/TL_05s/20220601-test/gp10-time-copy_only', 
+# 		img_format=c('png','jpg','gpr'), vid_format=c('mp4'),
+# 		names_levs=3, rename=F, sep='-', prefix=NULL,
+# 		# from_file='G0020009', to_file='G0031996', 
+# 		add_seq=TRUE,
+# 		from_daytime='10/19/2021 11:50', to_daytime='06/01/2022 12:00', time_format='%m/%d/%Y %H:%M')
