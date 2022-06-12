@@ -81,7 +81,7 @@ cam2disk<-function(source=NULL, dest=NULL,
 	flst<-list.files(source, recursive=T, pattern=form_patt)
 	# get the metadata
 	meta<-exiftoolr::exif_read(paste0(source,'/',flst))
-	meta$ModifyDate<-as.POSIXct(strptime(meta$ModifyDate, format='%Y:%m:%d %H:%M:%S')) # the time format is the match the one used in the dataframe created bt exitoolr
+	meta$FileModifyDate<-as.POSIXct(strptime(meta$FileModifyDate, format='%Y:%m:%d %H:%M:%S')) # the time format is the match the one used in the dataframe created bt exitoolr
 	
 	# Select the files to be copied and renamed
 	# -------------------------------------------
@@ -113,7 +113,7 @@ cam2disk<-function(source=NULL, dest=NULL,
 				stop('provided daytime argument not in the format of time_format!')
 			}
 		# select file to copy based on time
-		sub_meta<-meta[meta$ModifyDate>=t1 & meta$ModifyDate<=t2,]
+		sub_meta<-meta[meta$FileModifyDate>=t1 & meta$FileModifyDate<=t2,]
 		warning('File selection by TIME STAMP!')
 		} 
 	
@@ -164,14 +164,21 @@ cam2disk<-function(source=NULL, dest=NULL,
 	} else {
 		# copy only	
 		finname<-orig
-		file.copy(sub_meta$SourceFile, paste0(dest,'/',finname),,copy.date=TRUE)
+		file.copy(sub_meta$SourceFile, paste0(dest,'/',finname),copy.date=TRUE)
 	}
 
 	# write log file
-	sub_meta$copied_name<-finname
-    log_out<-sub_meta[,c(235,1:29,82,83)]
-	# sub_meta$ModifyDate<-as.character(sub_meta$ModifyDate)
-	write.table(log_out, file=paste0(dest,'/log_copy.txt'), sep='\t',quote=TRUE, row.names=FALSE)
+		sub_meta$copied_name<-finname
+		# find which variable is a list  
+		lid<-sapply(names(sub_meta), function(x) { 
+							!is.list(sub_meta[,x]) 
+						}
+			)
+		# exclude list variables from the log
+	    log_out<-sub_meta[,c('copied_name',names(lid[lid]))]
+		# sub_meta$FileModifyDate<-as.character(sub_meta$FileModifyDate)
+		write.table(log_out, file=paste0(dest,'/log_copy.txt'), append=TRUE,sep='\t',quote=TRUE, row.names=FALSE)
+	
 	alarm()
 			
 }
@@ -251,3 +258,5 @@ cam2disk<-function(source=NULL, dest=NULL,
 # 		# from_file='G0020009', to_file='G0031996', 
 # 		add_seq=TRUE,
 # 		from_daytime='10/19/2021 11:50', to_daytime='06/01/2022 12:00', time_format='%m/%d/%Y %H:%M')
+
+
