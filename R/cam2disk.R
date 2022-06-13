@@ -14,12 +14,12 @@
 
 #' Copy and Rename with folder structure
 #' 
-#' Copy files from a camera and copy them onto another drive while organizing them into a folder hierarchy. 
+#' Copy and optionally rename files from a device to another drive. The function allow to create the desired folder hierarchy and rename files using tags based on the folder structure. 
 #' 
 #' @param source absolute or relative path to the folder/drive where the files are stored (e.g., an SD )
 #' @param dest absolute path to where the files need to be copied
-#' @param img_format character vector (case insensitive) specifying in which formats the image files could be provided. List all formats that are being used in the project. Any format not specified will not be considered. Formats are case insensitive: formats differing only in case will be treated as the same format (i.e., "jpg" == "JPG")
-#' @param vid_format character vector (case insensitive) specifying in which formats the video files could be provided. List all formats that are being used in the project. Any format not specified will not be considered. Formats are case insensitive: formats differing only in case will be treated as the same format (i.e., "mp4" == "MP4")
+#' @param img_format character vector (case insensitive) specifying in which formats the image files could be provided. List all formats that are being used in the project. Any format not specified will not be considered. Formats are case insensitive: formats differing only in case will be treated as the same format (i.e., "jpg" == "JPG"). NULL will esclude images.
+#' @param vid_format character vector (case insensitive) specifying in which formats the video files could be provided. List all formats that are being used in the project. Any format not specified will not be considered. Formats are case insensitive: formats differing only in case will be treated as the same format (i.e., "mp4" == "MP4"). NULL will esclude videos.
 #' @param name_levs numeric, given the path of `dest`, it specify the last N levels of the path to be used in renaming a file (e.g., with dest= c:/lev1/lev2/lev3/lev4 and names_levs=2 then lev3 and lev4 will be used in the name)
 #' @param rename logical. Default to TRUE means that the copied files will also be renamed.
 #' @param sep character use to separate the different components of the file name
@@ -29,18 +29,19 @@
 #' @param to_file name of the last file file of those in the interval to be copied (and renamed). See [details]
 #' @param from_daytime timestamp marking the beginning of the time interval that includes the files to be copied on the base of when they were created originally (i.e., when the were created by the device that generated them).
 #' @param to_daytime timestamp marking the end of the time interval that includes the files to be copied on the base of when they were created originally (i.e., when the were created by the device that generated them).
-#' @param time_format format in which `from_daytime` and `to_daytime` are expressed as in [strptime].
+#' @param time_format format in which `from_daytime` and `to_daytime` are expressed, as in [strptime].
 #' 
 #' @details
-#' The time selection is based on the variable `ModifyDate` from the dataframe obtained using [exiftoolr::exif_read]. This because on development it seemed more reliable than CreatDate (which had unreal values for GRP files). 
+#' The time selection is based on the variable `FileModifyDate` from the dataframe obtained using [exiftoolr::exif_read]. This field was chosen because on development it seemed more commonly present on exif data from devices of different model-make. 
+#' `FileModifyDate` should be the timestamp of when the file was last modified by the devive (e.g., for a video it should represent the end of the recording), also this field seems more reliable than others (e.g., `CreatDate` had unreal values for raw GoPro .GPR files). 
 #' 
 #' From_file and to_file could be specified with or without extension. In case the extension is not provided, all files matching the name will be copied.
 #' Selection of file by name has priority over time selection.
 #' 
-#' The function rely on Exif data from the original file to get the file metadata to work with. In particular, Exif is used to get the time stamp of when the file was first created (i.e., by a device such as camera, or phone or gps)
-#' For files other than those created by divices that provide Exif metadata, the function should still work but only wit name-based selection 
+#' The function rely on Exif data from the original file to get the file metadata to work with. In particular, Exif is used to get the time stamp of when the file was "first created" (i.e., by a device such as camera, or phone or gps)
+#' For files other than those created by divices that provide Exif metadata, the function may still work. 
 #' 
-#' #Warning
+#' _Warning_
 #' The function will not overwrite existing file, however no warning that files already exist is give. To be on the safe side erase files in the destination folder before copying. 
 #' 
 #' @author Filippo Ferrario, \email{filippo.f3rrario@gmail.com} 
