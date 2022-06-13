@@ -7,3 +7,5 @@ _Install_
 devtools::install_github('https://github.com/filippo-ferrario/ActioneeR')
 
 ```
+
+After the first installation it may be required to run `install_exiftool()`
