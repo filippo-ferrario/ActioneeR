@@ -13,8 +13,8 @@
 #' Estimate the percentage of overalp in swathe between two adjacent cameras. 
 #'
 #'
-#' @param fov_R a numeric value/vector expressing FOV in RADIANTS
-#' @param fov_L a numeric value/vector expressing FOV in RADIANTS
+#' @param fov_L a numeric value/vector expressing FOV in RADIANTS. Either the FOV of all the cameras, or the left camera in a pair if the right one has a different FOV. In this case specify FOV_R.
+#' @param fov_R a numeric value/vector expressing FOV in RADIANTS. Optional, if not specified it is assument to be equal to fov_L.
 #' @param cam_spacing a numeric value/vector expressing the spacing between two cameras
 #' @param dist  a numeric value/vector expressing the distance between the camera and the plane of interest (e.g., the bottom, the ground)
 #'
@@ -28,7 +28,7 @@
 
 
 
-overlap_pc<-function(fov_R,fov_L,dist,cam_spacing)   {
+overlap_pc<-function(fov_L,fov_R=fov_L,dist,cam_spacing)   {
       # check args
       if (!is.numeric(fov_R)) stop ('fov_R must be numeric expressing FOV in RADIANTS')
       if (!is.numeric(fov_L)) stop ('fov_L must be numeric expressing FOV in RADIANTS')

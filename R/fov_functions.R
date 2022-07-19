@@ -18,8 +18,8 @@
 #' `FOV()` is the eq 1 in Rende et al. 2015. It calculates the Field of View at a given distance from the bottom based on the observed (or estimated) horizontal distance in the images.
 #' `WID()` is the eq 5 in Rende et al. 2015 (the inverse of eq. 1). Given a FOV and a distance from the bottom (or a desired plane) it calculates the horizontal footprint of an image on the bottom.
 #' `rad2deg()` convert radiants to decimal degree.
-
-
+#'
+#'
 #' @param C Horizontal distance of the observable extent (either estimated or measured) in the scene. Numeric
 #' @param d Distance of the camera from the bottom (or plane of interest)
 #' @param fov Field of view in radiants, estimated.

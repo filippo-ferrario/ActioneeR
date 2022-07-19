@@ -1,7 +1,7 @@
 # ===============================================================================
 # Name      : Wing settings 
 # Author    : Filippo Ferrario
-# Date      : 13-07-2022 [dd-mm-yyyy]
+# Date      : 18-07-2022 [dd-mm-yyyy]
 # Version   : 0.1
 # URL    : 
 # Aim       : 
