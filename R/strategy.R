@@ -13,6 +13,9 @@
 #' Help define the imaging strategy depending on the camera and rig properties, distance from the bottom and position of reference transects.
 #' 
 #' @inheritParams swath_rig
+#' @param fov_L a single numeric value expressing FOV in RADIANTS. Either the FOV of all the cameras, or the left camera in a pair if the right one has a different FOV. In this case specify FOV_R.
+#' @param cam_spacing a single numeric value expressing the spacing between two cameras
+#' @param dist  a single numeric value expressing the distance between the camera and the plane of interest (e.g., the bottom, the ground)
 #' @param min_camera_overlap Minimum desired overalp, expressed as a percentage, between frames of the (distal) camera during opposed filming passages. It specifically refers to the overlap in swath of the one single camera that is at the distal end of a rig.
 #' @param transect_pos the posistion on the bottom of the a reference transect (if used) relative to the center of the movement of the swath of the rig. Options are "side" or "center".
 #' @param corridor_width Distance between two consecutive reference transect lines. Defalult to NULL.
@@ -29,6 +32,10 @@
 #' Also `min_camera_overlap` is considered the minimum desired overlap between opposites extra passages.
 #' 
 #' @author Filippo Ferrario, \email{filippo.f3rrario@gmail.com} 
+#' 
+#' @seealso
+#' 
+#' [swath_rig], [overlap_pc_cam], [FOV], [WID]
 #' 
 #' @examples
 #' 
@@ -51,7 +58,8 @@ imaging_strategy<-function(fov_L, dist, cam_spacing, min_camera_overlap=NULL, n_
 	if (!is.numeric(n_cams)) stop ('n_cams must be numeric')
 	if (!is.numeric(min_camera_overlap)) stop ('min_camera_overlap must be numeric and expressed in %')
 	if (! transect_pos %in% c('side','center') ) stop ('transect_pos must be either "side" or "center"')
-
+	arg_len<-c(length(fov_L),length(dist),length(cam_spacing),length(n_cams))!=1
+	if (sum(arg_len)>0 ) stop (paste0('arguments "fov_L", "dist", "cam_spacing", "n_cams" need to be a single value' ))
 
 
 	# A) Solving distance of the center of the rig from the reference transect 
@@ -164,7 +172,7 @@ imaging_strategy<-function(fov_L, dist, cam_spacing, min_camera_overlap=NULL, n_
 
 
 # imaging_strategy(fov_L=1.42, dist=100, cam_spacing=41, transect_pos='side',min_camera_overlap=50, n_cams=3, corridor_width=NULL)
-# # debug(imaging_strategy)
+# debug(imaging_strategy)
 # imaging_strategy(fov_L=1.42, dist=100, cam_spacing=41, transect_pos='side',min_camera_overlap=50, n_cams=3, corridor_width=600)
 	
 	
