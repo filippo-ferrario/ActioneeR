@@ -28,7 +28,7 @@
 
 
 
-overlap_pc<-function(fov_L,fov_R=fov_L,dist,cam_spacing)   {
+overlap_pc_cam<-function(fov_L,fov_R=fov_L,dist,cam_spacing)   {
       # check args
       if (!is.numeric(fov_R)) stop ('fov_R must be numeric expressing FOV in RADIANTS')
       if (!is.numeric(fov_L)) stop ('fov_L must be numeric expressing FOV in RADIANTS')
@@ -59,5 +59,5 @@ overlap_pc<-function(fov_L,fov_R=fov_L,dist,cam_spacing)   {
 
 # bench
 # ----------   
-# overlap_pc( 1.352524, 1.352524,dist=50, cam_spacing=10)
+# overlap_pc_cam( 1.352524, 1.352524,dist=50, cam_spacing=10)
 

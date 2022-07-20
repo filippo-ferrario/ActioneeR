@@ -35,7 +35,7 @@
 #'
 #' @export
 
-swath<-function(fov_L,fov_R=fov_L,dist,cam_spacing, n_cams=NULL)   {   #,name_set
+swath_rig<-function(fov_L,fov_R=fov_L,dist,cam_spacing, n_cams=NULL)   {   #,name_set
 
   # check args
   if (!is.numeric(fov_R)) stop ('fov_R must be numeric expressing FOV in RADIANTS')
@@ -60,7 +60,7 @@ swath<-function(fov_L,fov_R=fov_L,dist,cam_spacing, n_cams=NULL)   {   #,name_se
        swath_mat[,k]<-swath
       }
 
-  overlap<- overlap_pc(fov_L,fov_R,dist,cam_spacing)
+  overlap<- overlap_pc_cam(fov_L,fov_R,dist,cam_spacing)
   attr(swath_mat,which='between camera overlap')<-overlap      
       # swath_list[[i]]<-swath_mat
       # }
