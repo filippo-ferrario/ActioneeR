@@ -13,7 +13,7 @@
 #' Help define the imaging strategy depending on the camera and rig properties, distance from the bottom and position of reference transects.
 #' 
 #' @inheritParams swath_rig
-#' @param fov_L a single numeric value expressing FOV in RADIANTS. Either the FOV of all the cameras, or the left camera in a pair if the right one has a different FOV. In this case specify FOV_R.
+#' @param fov_L a single numeric value expressing FOV in RADIANTS. 
 #' @param cam_spacing a single numeric value expressing the spacing between two cameras
 #' @param dist  a single numeric value expressing the distance between the camera and the plane of interest (e.g., the bottom, the ground)
 #' @param min_camera_overlap Minimum desired overalp, expressed as a percentage, between frames of the (distal) camera during opposed filming passages. It specifically refers to the overlap in swath of the one single camera that is at the distal end of a rig.
