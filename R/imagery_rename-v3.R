@@ -24,7 +24,7 @@
 #===============================================================================
 
 
-#' Rename files based on the strucure of the folder tree in which they are organized.
+#' Rename files based on the structure of the folder tree in which they are organized.
 #' 
 #' Originally developed to rename imagery files acquired in mapping projects. 
 #' The files are usually taken with different cameras and saved in subfolders named as the camera ID (as unique as possible) whitin a folder-tree organized to reflect shooting strategy (e.g., transects, DAY-SHOOTING_SESSION, cameras settings).  
