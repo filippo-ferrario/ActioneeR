@@ -73,7 +73,7 @@ strategy_side_line<-function(fov_L, dist, cam_spacing, min_camera_overlap=NULL, 
 		# cam2rig_overlap<-(hlf_sw-c_hlf_sw)/cam_swath 
 	}
 		
-	res2[1,]<-c('corridor length :',corridor_width)
+	res2[1,]<-c('corridor width :',corridor_width)
 	res2[2,]<-c('distance from the bottom :',dist)
 	res2[3,]<-c('rig swath :',rig_swath)
 	res2[4,]<-c('overlap with now extra passages :',cam2rig_overlap)
