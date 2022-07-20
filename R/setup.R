@@ -15,9 +15,9 @@
 #'
 #'
 #'
-#'
 #' @param matrix a matrix produced by [swath_rig].
-#' @param cond a string specifying the filtering conditions. Important: the string should contain the name of the object passed to `matrix`
+#' @param cond a string specifying the filtering conditions. Important: the string should refer to "matrix" AND NOT to the name of the object passed to `matrix`
+#' @param filter_on_swath should the matrix be filtered on the swath values (TRUE, the default), or the between camera overlap (FALSE)?
 #'
 #' @return
 #'
@@ -25,8 +25,9 @@
 #'
 #' @examples
 #'
-#' setup_filter(sw, cond='sw>150 & sw<200')
-#'
+#' sw<-swath_rig( 1.352524, dist=seq(50,100, by=10), cam_spacing=seq(10,100, by=10), n_cams=3)
+#' setup_filter(sw, cond='matrix>150 & matrix<200', filter_on_swath=TRUE)
+#' setup_filter(sw, cond='matrix>0.3 ', filter_on_swath=FALSE)
 #'
 #'
 #' @author Filippo Ferrario, \email{filippo.f3rrario@gmail.com} 
@@ -39,13 +40,16 @@
 #' @export
 
 
-
-setup_filter<-function(matrix, cond){
+setup_filter<-function(matrix, cond, filter_on_swath=TRUE ){
 
 	out<-matrix
+	cam_overlap<-attr(out,which='cam_overlap')
+	if (filter_on_swath==FALSE){
+		cond<-gsub(cond, pattern='matrix', replacement='cam_overlap')
+	}
 	ii<-which(eval(parse(text=cond)))
 	out[-ii]<-NA
-	attr(out,which='between camera overlap')[-ii]<-NA
+	attr(out,which='cam_overlap')[-ii]<-NA
 
 
 	pairs<-which(eval(parse(text=cond)), arr.ind=TRUE)
@@ -63,6 +67,6 @@ setup_filter<-function(matrix, cond){
 
 
 
-
-
-
+ # sw<-swath_rig( 1.352524, dist=seq(50,100, by=10), cam_spacing=seq(10,100, by=10), n_cams=3)
+ # setup_filter(sw, cond='matrix>150 & matrix<200', filter_on_swath=TRUE)
+ # setup_filter(sw, cond='matrix>0.3 ', filter_on_swath=FALSE)

@@ -4,12 +4,14 @@
 \alias{setup_filter}
 \title{Filtering a swath matrix}
 \usage{
-setup_filter(matrix, cond)
+setup_filter(matrix, cond, filter_on_swath = TRUE)
 }
 \arguments{
 \item{matrix}{a matrix produced by \link{swath_rig}.}
 
-\item{cond}{a string specifying the filtering conditions. Important: the string should contain the name of the object passed to \code{matrix}}
+\item{cond}{a string specifying the filtering conditions. Important: the string should refer to "matrix" AND NOT to the name of the object passed to \code{matrix}}
+
+\item{filter_on_swath}{should the matrix be filtered on the swath values (TRUE, the default), or the between camera overlap (FALSE)?}
 }
 \value{
 A named list containing the filtered matrix (i.e., only showing the result meeting the criteria) and a dataframe of the indices (i.e., distance from the bottom and camera spacing) associated to the selected criteria.
@@ -19,8 +21,9 @@ This function help visualising which combination of \emph{distance from the bott
 }
 \examples{
 
-setup_filter(sw, cond='sw>150 & sw<200')
-
+sw<-swath_rig( 1.352524, dist=seq(50,100, by=10), cam_spacing=seq(10,100, by=10), n_cams=3)
+setup_filter(sw, cond='matrix>150 & matrix<200', filter_on_swath=TRUE)
+setup_filter(sw, cond='matrix>0.3 ', filter_on_swath=FALSE)
 
 
 }
