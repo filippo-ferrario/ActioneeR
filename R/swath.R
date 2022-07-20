@@ -65,7 +65,7 @@ swath_rig<-function(fov_L,fov_R=fov_L,dist,cam_spacing, n_cams=NULL)   {   #,nam
       }
 
   overlap<- overlap_pc_cam(fov_L,fov_R,dist,cam_spacing)
-  attr(swath_mat,which='between camera overlap')<-overlap      
+  attr(swath_mat,which='cam_overlap')<-overlap      
       # swath_list[[i]]<-swath_mat
       # }
    # names(swath_list)<-name_set
