@@ -8,7 +8,7 @@
 # ===============================================================================
 
 
-#' Swathe
+#' Swath
 #'
 #' Estimate the swath that will be obtained using a give number of cameras alligned in a rig.
 #'
