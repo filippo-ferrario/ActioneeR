@@ -28,7 +28,7 @@
 #'
 #' @return
 #'
-#' all return a numerical vecotr.
+#' All return a numerical vector.
 #' 
 #' @author Filippo Ferrario, \email{filippo.f3rrario@gmail.com} 
 #' 

@@ -15,15 +15,15 @@ imaging_strategy(
 )
 }
 \arguments{
-\item{fov_L}{a numeric value/vector expressing FOV in RADIANTS. Either the FOV of all the cameras, or the left camera in a pair if the right one has a different FOV. In this case specify FOV_R.}
+\item{fov_L}{a single numeric value expressing FOV in RADIANTS. Either the FOV of all the cameras, or the left camera in a pair if the right one has a different FOV. In this case specify FOV_R.}
 
-\item{dist}{a numeric value/vector expressing the distance between the camera and the plane of interest (e.g., the bottom, the ground)}
+\item{dist}{a single numeric value expressing the distance between the camera and the plane of interest (e.g., the bottom, the ground)}
 
-\item{cam_spacing}{a numeric value/vector expressing the spacing between two cameras}
+\item{cam_spacing}{a single numeric value expressing the spacing between two cameras}
 
 \item{min_camera_overlap}{Minimum desired overalp, expressed as a percentage, between frames of the (distal) camera during opposed filming passages. It specifically refers to the overlap in swath of the one single camera that is at the distal end of a rig.}
 
-\item{n_cams}{number of cameras in the setup (all considred having the same properties and being alligned)}
+\item{n_cams}{number of cameras in the rig (all considred having the same properties and being alligned)}
 
 \item{transect_pos}{the posistion on the bottom of the a reference transect (if used) relative to the center of the movement of the swath of the rig. Options are "side" or "center".}
 
@@ -50,6 +50,9 @@ imaging_strategy(fov_L=1.42, dist=100, cam_spacing=41, transect_pos='center',min
 	
 	
 
+}
+\seealso{
+\link{swath_rig}, \link{overlap_pc_cam}, \link{FOV}, \link{WID}
 }
 \author{
 Filippo Ferrario, \email{filippo.f3rrario@gmail.com}

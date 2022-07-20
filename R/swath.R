@@ -13,7 +13,7 @@
 #' Estimate the swath that will be obtained using a give number of cameras alligned in a rig.
 #'
 #' @inheritParams overlap_pc_cam 
-#' @param n_cams number of cameras in the setup (all considred having the same properties and being alligned)
+#' @param n_cams number of cameras in the rig (all considred having the same properties and being alligned)
 #'
 #' @details
 #'
@@ -25,6 +25,10 @@
 #' A matrix storing swath values for each compbination of dimnames "dist" and "cam_spacing". The matrix also has between camera overlap stored as an attribute
 #' 
 #' @author Filippo Ferrario, \email{filippo.f3rrario@gmail.com} 
+#' 
+#' @seealso
+#' 
+#' [imaging_strategy], [overlap_pc_cam], [FOV], [WID]
 #' 
 #' @examples
 #' swath_rig(fov_L=1.352524, fov_R=1.352524,dist=50, cam_spacing=10, n_cams=3)

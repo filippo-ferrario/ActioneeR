@@ -15,7 +15,7 @@ swath_rig(fov_L, fov_R = fov_L, dist, cam_spacing, n_cams = NULL)
 
 \item{cam_spacing}{a numeric value/vector expressing the spacing between two cameras}
 
-\item{n_cams}{number of cameras in the setup (all considred having the same properties and being alligned)}
+\item{n_cams}{number of cameras in the rig (all considred having the same properties and being alligned)}
 }
 \value{
 A matrix storing swath values for each compbination of dimnames "dist" and "cam_spacing". The matrix also has between camera overlap stored as an attribute
@@ -33,6 +33,9 @@ swath_rig(fov_L=1.352524, fov_R=1.352524,dist=50, cam_spacing=10, n_cams=3)
 sw<-swath_rig( 1.352524, 1.352524,dist=seq(50,100, by=10), cam_spacing=seq(10,100, by=10), n_cams=3)
 sw
 
+}
+\seealso{
+\link{imaging_strategy}, \link{overlap_pc_cam}, \link{FOV}, \link{WID}
 }
 \author{
 Filippo Ferrario, \email{filippo.f3rrario@gmail.com}

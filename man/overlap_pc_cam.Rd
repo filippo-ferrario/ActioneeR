@@ -21,6 +21,9 @@ A matrix with named dimensions: columns are camera spacings, rows are distances 
 \description{
 Estimate the percentage of overalp in swathe between two adjacent cameras.
 }
+\seealso{
+\link{imaging_strategy}, \link{swath_rig}, \link{FOV}, \link{WID}
+}
 \author{
 Filippo Ferrario, \email{filippo.f3rrario@gmail.com}
 }

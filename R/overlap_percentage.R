@@ -22,6 +22,10 @@
 #'
 #' A matrix with named dimensions: columns are camera spacings, rows are distances from the plane of interest. Attention: remembere that dimnames are characters, if used to subset.
 #' 
+#' @seealso
+#' 
+#' [imaging_strategy], [swath_rig], [FOV], [WID]
+#' 
 #' @author Filippo Ferrario, \email{filippo.f3rrario@gmail.com} 
 #' 
 #' @export
