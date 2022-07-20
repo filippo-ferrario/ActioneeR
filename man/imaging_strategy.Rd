@@ -15,7 +15,7 @@ imaging_strategy(
 )
 }
 \arguments{
-\item{fov_L}{a single numeric value expressing FOV in RADIANTS. Either the FOV of all the cameras, or the left camera in a pair if the right one has a different FOV. In this case specify FOV_R.}
+\item{fov_L}{a single numeric value expressing FOV in RADIANTS.}
 
 \item{dist}{a single numeric value expressing the distance between the camera and the plane of interest (e.g., the bottom, the ground)}
 
