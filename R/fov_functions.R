@@ -13,7 +13,7 @@
 #'
 #' Functions to calculate a camera field of view and footprint on the bottom of an image given a distance to it.
 #'
-#' @desrciption
+#' @description
 #' 
 #' `FOV()` is the eq 1 in Rende et al. 2015. It calculates the Field of View at a given distance from the bottom based on the observed (or estimated) horizontal distance in the images.
 #' `WID()` is the eq 5 in Rende et al. 2015 (the inverse of eq. 1). Given a FOV and a distance from the bottom (or a desired plane) it calculates the horizontal footprint of an image on the bottom.
@@ -26,7 +26,7 @@
 #' @param x an angle expressed in radiants.
 #' 
 #'
-#' @values
+#' @return
 #'
 #' all return a numerical vecotr.
 #' 

@@ -21,7 +21,15 @@ rad2deg(x)
 
 \item{x}{an angle expressed in radiants.}
 }
+\value{
+all return a numerical vecotr.
+}
 \description{
+\code{FOV()} is the eq 1 in Rende et al. 2015. It calculates the Field of View at a given distance from the bottom based on the observed (or estimated) horizontal distance in the images.
+\code{WID()} is the eq 5 in Rende et al. 2015 (the inverse of eq. 1). Given a FOV and a distance from the bottom (or a desired plane) it calculates the horizontal footprint of an image on the bottom.
+\code{rad2deg()} convert radiants to decimal degree.
+}
+\details{
 Functions to calculate a camera field of view and footprint on the bottom of an image given a distance to it.
 }
 \references{

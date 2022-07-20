@@ -8,11 +8,11 @@
 # ===============================================================================
 
 
-#' Swath
+#' Swath of a camera rig
 #'
 #' Estimate the swath that will be obtained using a give number of cameras alligned in a rig.
 #'
-#' @inheritParams ActioneeR::overlap_pc 
+#' @inheritParams overlap_pc_cam 
 #' @param n_cams number of cameras in the setup (all considred having the same properties and being alligned)
 #'
 #' @details
@@ -26,11 +26,11 @@
 #' 
 #' @author Filippo Ferrario, \email{filippo.f3rrario@gmail.com} 
 #' 
-#' @example
-#' swath(fov_L=1.352524, fov_R=1.352524,dist=50, cam_spacing=10, n_cams=3)
+#' @examples
+#' swath_rig(fov_L=1.352524, fov_R=1.352524,dist=50, cam_spacing=10, n_cams=3)
 #' 
 #'
-#' sw<-swath( 1.352524, 1.352524,dist=seq(50,100, by=10), cam_spacing=seq(10,100, by=10), n_cams=3)
+#' sw<-swath_rig( 1.352524, 1.352524,dist=seq(50,100, by=10), cam_spacing=seq(10,100, by=10), n_cams=3)
 #' sw
 #'
 #' @export

@@ -2,7 +2,7 @@
 % Please edit documentation in R/imagery_rename-v3.R
 \name{imgRename}
 \alias{imgRename}
-\title{Rename files based on the strucure of the folder tree in which they are organized.}
+\title{Rename files based on the structure of the folder tree in which they are organized.}
 \usage{
 imgRename(
   imagery_path = NULL,

@@ -8,22 +8,51 @@
 # ===============================================================================
 
 
+#' Define the imaging strategy
 #'
-#'
-#' Help define filming strategy
-#'
+#' Help define the imaging strategy depending on the camera and rig properties, distance from the bottom and position of reference transects.
+#' 
+#' @inheritParams swath_rig
 #' @param min_camera_overlap Minimum desired overalp, expressed as a percentage, between frames of the (distal) camera during opposed filming passages. It specifically refers to the overlap in swath of the one single camera that is at the distal end of a rig.
+#' @param transect_pos the posistion on the bottom of the a reference transect (if used) relative to the center of the movement of the swath of the rig. Options are "side" or "center".
 #' @param corridor_width Distance between two consecutive reference transect lines. Defalult to NULL.
+#' 
 #'
+#'  
 #' @details
 #'
 #' A filming passage consists in one leg of the lawn mower path, so that two adjacent passages are usually filmed moving in opposit directions and are meant to have an overlap when they cross.
+#' When `transect_pos` is 'side', the imaging strategy consists in running one passage on one side of a reference transect, and one opposite passage on the other side of the transect taking care of having a deired degree of verlap.
+#' When `transect_pos` is 'center', the imaging strategy consists in running one passage on the transect. This strategy is most meaningful if used with corridors.    
 #'
-#'
+#' `min_camera_overlap` is the _minimum_ desired overlap between opposites passages. It defines the _maximum_ distance from the transect when `transect_pos` is 'side' to keep to avoid obtaining an overlap _less than_ the `min_camera_overlap`.
+#' Also `min_camera_overlap` is considered the minimum desired overlap between opposites extra passages.
+#' 
+#' @author Filippo Ferrario, \email{filippo.f3rrario@gmail.com} 
+#' 
+#' @examples
+#' 
+#' imaging_strategy(fov_L=1.42, dist=100, cam_spacing=41, transect_pos='side',min_camera_overlap=50, n_cams=3, corridor_width=NULL)
+#' imaging_strategy(fov_L=1.42, dist=100, cam_spacing=41, transect_pos='side',min_camera_overlap=50, n_cams=3, corridor_width=600)
+#' 	
+#' imaging_strategy(fov_L=1.42, dist=100, cam_spacing=41, transect_pos='center',min_camera_overlap=50, n_cams=3, corridor_width=NULL)
+#' imaging_strategy(fov_L=1.42, dist=100, cam_spacing=41, transect_pos='center',min_camera_overlap=50, n_cams=3, corridor_width=600)
+#' 	
+#' 	
+#' 
+#' @export
 
-strategy_side_line<-function(fov_L, dist, cam_spacing, min_camera_overlap=NULL, n_cams, corridor_width=NULL){
+imaging_strategy<-function(fov_L, dist, cam_spacing, min_camera_overlap=NULL, n_cams, transect_pos=c('side'), corridor_width=NULL){
 
 	# args check
+	if (!is.numeric(fov_L)) stop ('fov_L must be numeric expressing FOV in RADIANTS')
+	if (!is.numeric(dist)) stop ('dist must be numeric')
+	if (!is.numeric(cam_spacing)) stop ('cam_spacing must be numeric')
+	if (!is.numeric(n_cams)) stop ('n_cams must be numeric')
+	if (!is.numeric(min_camera_overlap)) stop ('min_camera_overlap must be numeric and expressed in %')
+	if (! transect_pos %in% c('side','center') ) stop ('transect_pos must be either "side" or "center"')
+
+
 
 	# A) Solving distance of the center of the rig from the reference transect 
 	cam_ov<-min_camera_overlap/100
@@ -31,18 +60,28 @@ strategy_side_line<-function(fov_L, dist, cam_spacing, min_camera_overlap=NULL, 
 	cam_swath<-WID(fov_L,dist) 
 	rig_swath<-as.numeric(swath_rig(fov_L=fov_L, n_cams=n_cams, dist=dist, cam_spacing=cam_spacing))
 	hlf_sw<- rig_swath/2
-	# calclulate size of the frame corresponding to the overalp 
-	cam_ov_size<-cam_ov*cam_swath
-	# calculate distance of the transect from bord of the frame (the transect should lay in the middle of the overlap)
-	dist_transect<- cam_ov_size/2
-	# calculate the distance of the center of the rig from the reference transect 
-	Xswcnt<-hlf_sw-dist_transect
+	
+	if (transect_pos=='side'){
+		# calclulate size of the frame corresponding to the overalp 
+		cam_ov_size<-cam_ov*cam_swath
+		# calculate distance of the transect from bord of the frame (the transect should lay in the middle of the overlap)
+		dist_transect<- cam_ov_size/2
+		# calculate the distance of the center of the rig from the reference transect 
+		Xswcnt<-hlf_sw-dist_transect
+	} else { # case in which the center of the swath is alligned on the trancect
+		Xswcnt<-0
+	}
 
 	# report answers to A	
 	res2<-res<-data.frame(info=NA, val=NA)		
-	res[1,]<- c('overlap desired on the transect :', min_camera_overlap )
-	res[2,]<- c('distance between swaths centers :', 2*Xswcnt)
-	res[3,]<- c('horizontal distance to keep from transect :', Xswcnt)
+	if (transect_pos=='side') {
+		res[1,]<- c('overlap desired on the transect :', min_camera_overlap )
+		} else {
+		res[1,]<- c('minimum overlap desired between passages :', min_camera_overlap )	
+		}
+	res[2,]<- c('distance between swaths centers :', ifelse(transect_pos=='side',2*Xswcnt, 'N/A'))
+	res[3,]<- c('maximum horizontal distance to keep from transect :', Xswcnt)
+	
 
 	# Scenario with corridor
 	if (!is.null(corridor_width))  {
@@ -76,7 +115,7 @@ strategy_side_line<-function(fov_L, dist, cam_spacing, min_camera_overlap=NULL, 
 	res2[1,]<-c('corridor width :',corridor_width)
 	res2[2,]<-c('distance from the bottom :',dist)
 	res2[3,]<-c('rig swath :',rig_swath)
-	res2[4,]<-c('overlap with now extra passages :',cam2rig_overlap)
+	res2[4,]<-c('overlap with no extra passages :',cam2rig_overlap)
 
 	# C) Scenario with Not enough overlap (or not at all) between opposite passages.
 	# C1) how many extra passages to have desidered overlap (i.e., min_camera_overlap)
@@ -120,15 +159,20 @@ strategy_side_line<-function(fov_L, dist, cam_spacing, min_camera_overlap=NULL, 
 }
 
 
-# bench
-# --------
+# # bench
+# # --------
 
 
-strategy_side_line(fov_L=1.42, dist=100, cam_spacing=41, min_camera_overlap=50, n_cams=3, corridor_width=NULL)
-debug(strategy_side_line)
-strategy_side_line(fov_L=1.42, dist=100, cam_spacing=41, min_camera_overlap=50, n_cams=3, corridor_width=600)
+# imaging_strategy(fov_L=1.42, dist=100, cam_spacing=41, transect_pos='side',min_camera_overlap=50, n_cams=3, corridor_width=NULL)
+# # debug(imaging_strategy)
+# imaging_strategy(fov_L=1.42, dist=100, cam_spacing=41, transect_pos='side',min_camera_overlap=50, n_cams=3, corridor_width=600)
 	
 	
+	
+
+# imaging_strategy(fov_L=1.42, dist=100, cam_spacing=41, transect_pos='center',min_camera_overlap=50, n_cams=3, corridor_width=NULL)
+# # debug(imaging_strategy)
+# imaging_strategy(fov_L=1.42, dist=100, cam_spacing=41, transect_pos='center',min_camera_overlap=50, n_cams=3, corridor_width=600)
 	
 	
 	

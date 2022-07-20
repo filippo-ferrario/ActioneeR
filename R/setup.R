@@ -1,5 +1,5 @@
 # ===============================================================================
-# Name      : Wing settings 
+# Name      : Rig settings 
 # Author    : Filippo Ferrario
 # Date      : 18-07-2022 [dd-mm-yyyy]
 # Version   : 0.1
@@ -12,17 +12,6 @@
 #'
 #' 
 #'
-#' @param 
-#' @param 
-#' @param 
-#' @param 
-#'
-#' @return
-#'
-#' 
-#' 
-#' @author Filippo Ferrario, \email{filippo.f3rrario@gmail.com} 
-#' 
 #' 
 #'
 
@@ -36,5 +25,5 @@ data.frame(dist=dimnames(sw)$dist[pairs[,1]],cam_spacing=dimnames(sw)$cam_spacin
 
 }
 
-matrix<-sw
-cond_1<-'<150'
+# matrix<-sw
+# cond_1<-'<150'
