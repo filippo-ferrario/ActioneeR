@@ -104,7 +104,7 @@ strategy_side_line<-function(fov_L, dist, cam_spacing, min_camera_overlap=NULL, 
 		names(dists_to_trans)[ind]<-'side 2'
 		
 		res2[5,]<-c('required extra passages :',extra_pass)
-		res2[6,]<-c('overlap beteween extra passages :',new_cam2rig_ov)
+		res2[6,]<-c('overlap between extra passages :',new_cam2rig_ov)
 		dist_labs<- paste(names(dists_to_trans),round(dists_to_trans,2), sep='=' )
 		res2[7,]<-c('distance of extra passages from transect :',paste(dist_labs, collapse=' | '))
 
