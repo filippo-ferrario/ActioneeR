@@ -3,6 +3,7 @@
 export(FOV)
 export(WID)
 export(cam2disk)
+export(find_max_spacing)
 export(imaging_strategy)
 export(imgRename)
 export(overlap_pc_cam)

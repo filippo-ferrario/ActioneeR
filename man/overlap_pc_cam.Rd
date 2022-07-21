@@ -16,10 +16,10 @@ overlap_pc_cam(fov_L, fov_R = fov_L, dist, cam_spacing)
 \item{cam_spacing}{a numeric value/vector expressing the spacing between two cameras}
 }
 \value{
-A matrix with named dimensions: columns are camera spacings, rows are distances from the plane of interest. Attention: remembere that dimnames are characters, if used to subset.
+A matrix of estimate the percentage of overalp (\%) with named dimensions: columns are camera spacings, rows are distances from the plane of interest. Attention: remembere that dimnames are characters, if used to subset.
 }
 \description{
-Estimate the percentage of overalp in swathe between two adjacent cameras.
+Estimate the percentage of overalp in swath between two adjacent cameras.
 }
 \seealso{
 \link{imaging_strategy}, \link{swath_rig}, \link{FOV}, \link{WID}

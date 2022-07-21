@@ -1,7 +1,7 @@
 # ===============================================================================
-# Name   	: 
-# Author 	: 
-# Date   	:  [dd-mm-yyyy]
+# Name   	: Find maximum allowed spacing
+# Author 	: Filippo Ferrario
+# Date   	: 21-07-2022 [dd-mm-yyyy]
 # Version	: 
 # URL		: 
 # Aim    	: 
@@ -32,9 +32,6 @@
 #' @author Filippo Ferrario, \email{filippo.f3rrario@gmail.com} 
 #' 
 #' @export
-
-
-
 
 
 
@@ -72,4 +69,4 @@ find_max_spacing<-function(fov_L,fov_R=fov_L, min_camera_overlap, dist)   {
 # min_camera_overlap= seq(40, 60, 10)
 # dist=seq(70, 100, 10)
 
-find_max_spacing(fov_L=1.42 , min_camera_overlap= seq(40, 60, 10),dist=seq(70, 100, 10))
+# find_max_spacing(fov_L=1.42 , min_camera_overlap= seq(40, 60, 10),dist=seq(70, 100, 10))

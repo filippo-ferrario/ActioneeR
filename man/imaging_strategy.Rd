@@ -21,7 +21,7 @@ imaging_strategy(
 
 \item{cam_spacing}{a single numeric value expressing the spacing between two cameras}
 
-\item{min_camera_overlap}{Minimum desired overalp, expressed as a percentage, between frames of the (distal) camera during opposed filming passages. It specifically refers to the overlap in swath of the one single camera that is at the distal end of a rig.}
+\item{min_camera_overlap}{Minimum desired overalp, expressed as a percentage, between frames of the (distal) camera during opposed filming passages (see details). It specifically refers to the overlap in swath of the one single camera that is at the distal end of a rig.}
 
 \item{n_cams}{number of cameras in the rig (all considred having the same properties and being alligned)}
 
@@ -37,8 +37,8 @@ A filming passage consists in one leg of the lawn mower path, so that two adjace
 When \code{transect_pos} is 'side', the imaging strategy consists in running one passage on one side of a reference transect, and one opposite passage on the other side of the transect taking care of having a deired degree of verlap.
 When \code{transect_pos} is 'center', the imaging strategy consists in running one passage on the transect. This strategy is most meaningful if used with corridors.
 
-\code{min_camera_overlap} is the \emph{minimum} desired overlap between opposites passages. It defines the \emph{maximum} distance from the transect when \code{transect_pos} is 'side' to keep to avoid obtaining an overlap \emph{less than} the \code{min_camera_overlap}.
-Also \code{min_camera_overlap} is considered the minimum desired overlap between opposites extra passages.
+\code{min_camera_overlap} is the \emph{minimum} desired overlap between opposites passages. When \code{transect_pos} is 'side', it defines the \emph{maximum} distance to keep from the transect to avoid obtaining an overlap \emph{less than} the \code{min_camera_overlap}.
+When \code{transect_pos} is 'center', \code{min_camera_overlap} is considered the minimum desired overlap between opposites extra passages: the overlap is used a threshold to define spacing of passages, so the actual overlap among passages could be higher.
 }
 \examples{
 
