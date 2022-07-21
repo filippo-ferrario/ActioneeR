@@ -10,7 +10,7 @@
 
 #' Overalp estimation Functions 
 #'
-#' Estimate the percentage of overalp in swathe between two adjacent cameras. 
+#' Estimate the percentage of overalp in swath between two adjacent cameras. 
 #'
 #'
 #' @param fov_L a numeric value/vector expressing FOV in RADIANTS. Either the FOV of all the cameras, or the left camera in a pair if the right one has a different FOV. In this case specify FOV_R.
@@ -20,7 +20,7 @@
 #'
 #' @return
 #'
-#' A matrix with named dimensions: columns are camera spacings, rows are distances from the plane of interest. Attention: remembere that dimnames are characters, if used to subset.
+#' A matrix of estimate the percentage of overalp (%) with named dimensions: columns are camera spacings, rows are distances from the plane of interest. Attention: remembere that dimnames are characters, if used to subset.
 #' 
 #' @seealso
 #' 
@@ -55,7 +55,7 @@ overlap_pc_cam<-function(fov_L,fov_R=fov_L,dist,cam_spacing)   {
 
               # calculate percent
               max_ov<-apply(OV/pair, max,MARGIN=1)
-              over[,k]<-max_ov
+              over[,k]<-max_ov*100
       }
       over
 

@@ -16,7 +16,7 @@
 #' @param fov_L a single numeric value expressing FOV in RADIANTS. 
 #' @param cam_spacing a single numeric value expressing the spacing between two cameras
 #' @param dist  a single numeric value expressing the distance between the camera and the plane of interest (e.g., the bottom, the ground)
-#' @param min_camera_overlap Minimum desired overalp, expressed as a percentage, between frames of the (distal) camera during opposed filming passages. It specifically refers to the overlap in swath of the one single camera that is at the distal end of a rig.
+#' @param min_camera_overlap Minimum desired overalp, expressed as a percentage, between frames of the (distal) camera during opposed filming passages (see details). It specifically refers to the overlap in swath of the one single camera that is at the distal end of a rig.
 #' @param transect_pos the posistion on the bottom of the a reference transect (if used) relative to the center of the movement of the swath of the rig. Options are "side" or "center".
 #' @param corridor_width Distance between two consecutive reference transect lines. Defalult to NULL.
 #' 
@@ -28,8 +28,8 @@
 #' When `transect_pos` is 'side', the imaging strategy consists in running one passage on one side of a reference transect, and one opposite passage on the other side of the transect taking care of having a deired degree of verlap.
 #' When `transect_pos` is 'center', the imaging strategy consists in running one passage on the transect. This strategy is most meaningful if used with corridors.    
 #'
-#' `min_camera_overlap` is the _minimum_ desired overlap between opposites passages. It defines the _maximum_ distance from the transect when `transect_pos` is 'side' to keep to avoid obtaining an overlap _less than_ the `min_camera_overlap`.
-#' Also `min_camera_overlap` is considered the minimum desired overlap between opposites extra passages.
+#' `min_camera_overlap` is the _minimum_ desired overlap between opposites passages. When `transect_pos` is 'side', it defines the _maximum_ distance to keep from the transect to avoid obtaining an overlap _less than_ the `min_camera_overlap`.
+#' When `transect_pos` is 'center', `min_camera_overlap` is considered the minimum desired overlap between opposites extra passages: the overlap is used a threshold to define spacing of passages, so the actual overlap among passages could be higher.
 #' 
 #' @author Filippo Ferrario, \email{filippo.f3rrario@gmail.com} 
 #' 
@@ -123,7 +123,7 @@ imaging_strategy<-function(fov_L, dist, cam_spacing, min_camera_overlap=NULL, n_
 	res2[1,]<-c('corridor width :',corridor_width)
 	res2[2,]<-c('distance from the bottom :',dist)
 	res2[3,]<-c('rig swath :',rig_swath)
-	res2[4,]<-c('overlap with no extra passages :',cam2rig_overlap)
+	res2[4,]<-c('% overlap with no extra passages :',cam2rig_overlap*100)
 
 	# C) Scenario with Not enough overlap (or not at all) between opposite passages.
 	# C1) how many extra passages to have desidered overlap (i.e., min_camera_overlap)
@@ -147,11 +147,11 @@ imaging_strategy<-function(fov_L, dist, cam_spacing, min_camera_overlap=NULL, n_
 		dists_to_trans<-Xswcnt + centers_spacing*(1:extra_pass)
 		ind<-dists_to_trans>(corridor_width/2)
 		dists_to_trans[ind]<-corridor_width-dists_to_trans[ind]
-		names(dists_to_trans)<-'side 1'
+		names(dists_to_trans)<- rep("side 1", length(dists_to_trans))
 		names(dists_to_trans)[ind]<-'side 2'
 		
 		res2[5,]<-c('required extra passages :',extra_pass)
-		res2[6,]<-c('overlap between extra passages :',new_cam2rig_ov)
+		res2[6,]<-c('% overlap between extra passages :',new_cam2rig_ov*100)
 		dist_labs<- paste(names(dists_to_trans),round(dists_to_trans,2), sep='=' )
 		res2[7,]<-c('distance of extra passages from transect :',paste(dist_labs, collapse=' | '))
 
