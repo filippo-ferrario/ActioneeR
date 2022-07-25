@@ -1,8 +1,8 @@
 Package: ActioneeR
 Version: 0.1
 Date: 2022-06-01
-Title: Package to manage imagery and data from cameras in the field.
-Description: This package contains function to help copy, rename, download and organise files from camera to the HDD. The package want to make these processes more efficient when in the field it is needed to copy a large number of files. Organizing files in the correct fodler hierarchy will help the processing of these at a later stage. 
+Title: Package to support imagery acquisition for underwater photogrammetry, manage and organize imagery and data from cameras in the field.
+Description: Package to support imagery acquisition for underwater photogrammetry. The functions in this package help estimate the Field of view, deciding the fimling strategy, and manage imagery and data from cameras in the field. It contains function to help copy, rename, download and organise files from camera to the HDD. The package want to make these processes more efficient when in the field it is needed to copy a large number of files.Originally developped to work with action cameras (like GoPro, Garmin Virb), it should work with different cameras.  Organizing files in the correct fodler hierarchy will help the processing of these at a later stage. 
 Author: Filippo Ferrario <filippo.f3rrario@gmail.com>
 Maintainer: Filippo Ferrario <filippo.f3rrario@gmail.com>
 Depends: exiftoolr

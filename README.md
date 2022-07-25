@@ -1,5 +1,5 @@
 # ActioneeR
- Package to manage imagery and data from cameras in the field. Originally develop to work with action cameras (like GoPro, Garmin Virb).
+ Package to support imagery acquisition for underwater photogrammetry. The functions in this package help estimate the Field of view, deciding the fimling strategy and manage imagery and data from cameras in the field. Originally developped to work with action cameras (like GoPro, Garmin Virb), it should work with different cameras.
 
 _Install_
 
