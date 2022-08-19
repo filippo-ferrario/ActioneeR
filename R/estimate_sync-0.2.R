@@ -10,13 +10,27 @@
 # ===============================================================================
 
 
-
-
-
-
-
-#' @param ref_data 
-
+#' Estimate reference points in images sequences 
+#' 
+#'
+#' Given a set of reference points in a sequence of images taken at regular intervals (i.e., the file name of an image corresponding to a known scene, such as the beginning or the end of a chunk of images of interest),
+#' the function estimates the file name of corresponding images in a different image sequence taken at the same regular interval.
+#'			   
+#'
+#' @param source absolute or relative path to the folder/drive where the subfolders with the image files of the individual cameras are stored. 
+#' @param ref_data dataframe with information about reference points in the sequence for Master and initial ref points for slaves.
+#' @param output_path absolute or relative path to the output file (.csv). It must end with the file name
+#' @param shooting_group name of the column in the dataset specifying the group of picture taken in the same shooting session 
+#' @param cameraID name of the column in the dataset grouping the picture by camera 
+#' @param camera_role name of the column in the dataset specifying the role of the camera. That is 'master' for the camera used to retrive reference points, 'slave' for the other cameras that need to be synchronized with the 'master'
+#' @param sequence name of the column in the dataset grouping the images into a continuous sequence within the shooting session (e.g., a transect from start to end)
+#' @param ref_point name of the column in the dataset specifying if the reference point is the 'start' or the 'end' of the sequence 
+#' @param file_name name of the column in the dataset specifying the file name of the image taken as reference point
+#' 
+#' 
+#' @author Filippo Ferrario, \email{filippo.f3rrario@gmail.com} 
+#' 
+#' @export
 
 
 
@@ -171,18 +185,18 @@ estimate_sync<-function(source=NULL, ref_data=NULL, output_path=NULL,shooting_gr
 # Bench
 # =========
 
-ref_annBAD<-read.csv('C:/Users/ferrariof/Documents/2022-CSRF_urchin_kelp/data/BIC-PIL-image_sync-BAD.csv')
+# ref_annBAD<-read.csv('C:/Users/ferrariof/Documents/2022-CSRF_urchin_kelp/data/BIC-PIL-image_sync-BAD.csv')
 
-ref_ann<-read.csv('C:/Users/ferrariof/Documents/2022-CSRF_urchin_kelp/data/BIC-PIL-image_sync.csv')
+# ref_ann<-read.csv('C:/Users/ferrariof/Documents/2022-CSRF_urchin_kelp/data/BIC-PIL-image_sync.csv')
 
-source='C:/Users/ferrariof/Documents/2022-CSRF_urchin_kelp/imagery/QC-BIC-mosaicing/PIL/TL_1s'
-estimate_sync(source='C:/Users/ferrariof/Documents/2022-CSRF_urchin_kelp/imagery/QC-BIC-mosaicing/PIL/TL_1s' ,output_path='C:/Users/ferrariof/Documents/2022-CSRF_urchin_kelp/data/BIC-PIL-image_sync-esitmated_ref.csv',  ref_data=ref_ann , shooting_group='shooting_group' , cameraID='cameraID' , camera_role='camera_role' , sequence='sequence' , ref_point='ref_point' , file_name='file_name')
+# source='C:/Users/ferrariof/Documents/2022-CSRF_urchin_kelp/imagery/QC-BIC-mosaicing/PIL/TL_1s'
+# estimate_sync(source='C:/Users/ferrariof/Documents/2022-CSRF_urchin_kelp/imagery/QC-BIC-mosaicing/PIL/TL_1s' ,output_path='C:/Users/ferrariof/Documents/2022-CSRF_urchin_kelp/data/BIC-PIL-image_sync-esitmated_ref.csv',  ref_data=ref_ann , shooting_group='shooting_group' , cameraID='cameraID' , camera_role='camera_role' , sequence='sequence' , ref_point='ref_point' , file_name='file_name')
 
 
-ref_data=ref_ann
-shooting_group='shooting_group'
-cameraID='cameraID'
-camera_role='camera_role'
-sequence='sequence'
-ref_point='ref_point'
-file_name='file_name'
+# ref_data=ref_ann
+# shooting_group='shooting_group'
+# cameraID='cameraID'
+# camera_role='camera_role'
+# sequence='sequence'
+# ref_point='ref_point'
+# file_name='file_name'
