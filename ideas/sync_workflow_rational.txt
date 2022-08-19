@@ -1,0 +1,24 @@
+# ===============================================================================
+# Name   	: Rational for imagery syncronization
+# Author 	: Filippo Ferrario
+# Date   	: 10-08-2022 [dd-mm-yyyy]
+# Version	: 
+# URL		: 
+# Aim    	: 
+
+Workflow:
+----------
+
+1) find the reference points in a sequence of choice (i.e., the master sequence)
+	- the user fill in a spreadsheet with :
+		= the annotated reference point in the master sequence
+		= the annotated reference point at the beginning of the slave sequences.
+		
+2) estimate the corresponding reference points in the other sequences (i.e., the slaves sequences)
+	- FUN 'estimate_sync': finds automatically correspondences in slaves and output them in a spreadsheet (the master and slave sequences need to be of the same length(?), and with the same interval between images)
+3) the user must validate the correspondences and correct them if needed.
+	- validation should be done on the spreadsheet output from 'estimate_sync'
+	- how to correction should be defined
+4) sync all the images in master with thise in slaves by esplicity pairing the file names in a spreadsheet.
+	- each sequence should be a column in which the file names of the images are listed and annotated 
+	- sequence columns should be next to eachother so that it could be easily found the file name of the images synced.  
