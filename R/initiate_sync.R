@@ -56,4 +56,4 @@ initiate_sync<-function(output_path=NULL)
 
 }
 
-initiate_sync(output_path='./data/BIC-PROVA-image_sync.csv')
+# initiate_sync(output_path='./data/BIC-PROVA-image_sync.csv')
