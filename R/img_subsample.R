@@ -119,10 +119,10 @@ img_subsample<-function(source=NULL, paired_synced=NULL, dest=NULL, interval=1, 
 
 
 
-img_subsample(source='C:/Users/ferrariof/Documents/2022-CSRF_urchin_kelp/imagery/QC-BIC-mosaicing/PIL/TL_1s' ,
-				dest='C:/Users/ferrariof/Documents/2022-CSRF_urchin_kelp/imagery/QC-BIC-mosaicing/PIL/sub100', 
-				 paired_synced=paired, 
-				 interval=300,
-				 shooting_group='shooting_group' , 
-				cameraID='cameraID' 
-				)
+# img_subsample(source='C:/Users/ferrariof/Documents/2022-CSRF_urchin_kelp/imagery/QC-BIC-mosaicing/PIL/TL_1s' ,
+# 				dest='C:/Users/ferrariof/Documents/2022-CSRF_urchin_kelp/imagery/QC-BIC-mosaicing/PIL/sub100', 
+# 				 paired_synced=paired, 
+# 				 interval=300,
+# 				 shooting_group='shooting_group' , 
+# 				cameraID='cameraID' 
+# 				)
