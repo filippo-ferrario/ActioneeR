@@ -58,7 +58,7 @@ pair_synced<-function(source=NULL, ref_data=NULL, use_validated=F, output_path=N
 	# long<-long[,!names(long)==camera_role]
 	wide<-tidyr::pivot_wider(long, id_cols=c(shooting_group,sequence,pic),names_from=cameraID,values_from=file_name)
 	write.csv(wide, file=output_path, quote=FALSE, row.names=FALSE)
-		# wide
+	wide
 }
 
 # BENCH
