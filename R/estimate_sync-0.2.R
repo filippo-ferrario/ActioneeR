@@ -37,7 +37,17 @@
 estimate_sync<-function(source=NULL, ref_data=NULL, output_path=NULL,shooting_group='shooting_group', cameraID='cameraID', camera_role='camera_role', sequence='sequence', ref_point='ref_point', file_name='file_name')
 {		
 		# check args
-		if (sum(ref_data[,camera_role] %in% c('master', 'slave'))!= length(ref_data[,camera_role])) stop('camera_role in ref_data maust be either "master" or "slave"')
+		if (class(ref_data)!='data.frame' | is.null(ref_data)) stop('ref_data must be a data.frame')
+		if (sum(ref_data[,camera_role] %in% c('master', 'slave'))!= length(ref_data[,camera_role])) stop('camera_role in ref_data must be either "master" or "slave"')
+		if (sum(!ref_data[,ref_point] %in% c('start', 'end'))>0) stop('ref_point in ref_data must be either "start" or "end"')
+		if (!is.character(source)) stop('source must be a character')
+		if (!is.character(output_path)) stop('output_path must be a character')
+		if (!is.character(shooting_group)) stop('shooting_group must be a character')
+		if (!is.character(cameraID)) stop('cameraID must be a character')
+		if (!is.character(camera_role)) stop('camera_role must be a character')
+		if (!is.character(sequence)) stop('sequence must be a character')
+		if (!is.character(ref_point)) stop('ref_point must be a character')
+		if (!is.character(file_name)) stop('file_name must be a character')
 
 		# obtain file list with relative path
 		rel_path<-list.files(source,recursive=T)
@@ -187,8 +197,8 @@ estimate_sync<-function(source=NULL, ref_data=NULL, output_path=NULL,shooting_gr
 
 # ref_annBAD<-read.csv('C:/Users/ferrariof/Documents/2022-CSRF_urchin_kelp/data/BIC-PIL-image_sync-BAD.csv')
 
-# ref_ann<-read.csv('C:/Users/ferrariof/Documents/2022-CSRF_urchin_kelp/data/BIC-PIL-image_sync.csv')
-
+ref_ann<-read.csv('C:/Users/ferrariof/Documents/2022-CSRF_urchin_kelp/data/BIC-PIL-image_sync.csv')
+# 
 # source='C:/Users/ferrariof/Documents/2022-CSRF_urchin_kelp/imagery/QC-BIC-mosaicing/PIL/TL_1s'
 # estimate_sync(source='C:/Users/ferrariof/Documents/2022-CSRF_urchin_kelp/imagery/QC-BIC-mosaicing/PIL/TL_1s' ,output_path='C:/Users/ferrariof/Documents/2022-CSRF_urchin_kelp/data/BIC-PIL-image_sync-esitmated_ref.csv',  ref_data=ref_ann , shooting_group='shooting_group' , cameraID='cameraID' , camera_role='camera_role' , sequence='sequence' , ref_point='ref_point' , file_name='file_name')
 
