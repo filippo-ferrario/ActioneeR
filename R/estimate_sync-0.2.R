@@ -1,8 +1,8 @@
 # ===============================================================================
 # Name   	: Estimate imagery syncronization
 # Author 	: Filippo Ferrario
-# Date   	: 10-08-2022 [dd-mm-yyyy]
-# Version	: 0.2
+# Date   	: 18-10-2022 [dd-mm-yyyy]
+# Version	: 0.3
 # URL		: 
 # Aim    	: Given a set of reference points in a sequence of images taken at regular intervals (i.e., the file name of an image corresponding to a known scene, such as the beginning or the end of a chunk of images of interest),
 #			  the function should estimate the file name of corresponding images in a different image sequence taken at the same regular interval.
@@ -30,11 +30,11 @@
 #' 
 #' @author Filippo Ferrario, \email{filippo.f3rrario@gmail.com} 
 #' 
-#' @export
 
 
 
-estimate_sync<-function(source=NULL, ref_data=NULL, output_path=NULL,shooting_group='shooting_group', cameraID='cameraID', camera_role='camera_role', sequence='sequence', ref_point='ref_point', file_name='file_name')
+
+estimate_sync<-function(source=NULL, ref_data=NULL, output_path=NULL,shooting_group='shooting_group', cameraID='cameraID', camera_role='camera_role', sequence='sequence', ref_point='ref_point', file_name='file_name', img_extension='JPG')
 {		
 		# check args
 		if (class(ref_data)!='data.frame' | is.null(ref_data)) stop('ref_data must be a data.frame')
@@ -50,11 +50,22 @@ estimate_sync<-function(source=NULL, ref_data=NULL, output_path=NULL,shooting_gr
 		if (!is.character(file_name)) stop('file_name must be a character')
 
 		# obtain file list with relative path
-		rel_path<-list.files(source,recursive=T)
-
+		ext_caseinsensitive<-paste0(tolower(img_extension),'|',toupper(img_extension))
+		rel_path<-list.files(source,recursive=T, pattern=ext_caseinsensitive)
+		if (length(rel_path)==0) stop('"Source" is empty! check folder path')
 		# # create unique annotations
 		# ref_data$annot<-paste(ref_data[,camera_role],ref_data[,cameraID],ref_data[,sequence],ref_data[,ref_point], sep=' ' ) 
 		
+########
+		comps<- strsplit(rel_path, split='/')
+		f<-unlist(lapply(comps ,function(x){ #browser()
+					comp<-x[-length(x)]
+					paste0(comp,collapse='/')
+					})
+		)
+		path_list<-split(rel_path, f=f)
+########
+
 		# define combinations of masters and slaves
 		# ID_role<-paste0(ref_data[,cameraID],ref_data[,camera_role])
 		ID_role<-paste(ref_data[,shooting_group],ref_data[,cameraID],ref_data[,camera_role], ref_data[,sequence])
@@ -64,12 +75,19 @@ estimate_sync<-function(source=NULL, ref_data=NULL, output_path=NULL,shooting_gr
 		
 		def_slaves<-lapply(masters, function(x) { #browser()
 										ms_cam<-unlist(strsplit(x, split='master'))
+										# shoot_str<-regexpr(ms_cam[1], pattern='[[:alnum:]_-]+')
+										shoot_str<-regexpr(ms_cam[1], pattern='(.+? )')
+										shoot_gpr<-regmatches(ms_cam[1],m=shoot_str)
+										shoot_gpr
+
 										# sl_cam<-slaves[-grep(slaves,pattern=ms_cam)]
-										sl_cam<-slaves[grep(slaves,pattern=ms_cam[2])]
+										# sl_cam<-slaves[grep(slaves,pattern=ms_cam[2])]
+										sl_cam<-slaves[grep(slaves,pattern=paste0(shoot_gpr,'(.+?) slave',ms_cam[2]))]
 										sl_cam
 										})
 		names(def_slaves)<-masters
 		def_slaves<-def_slaves[!lengths(def_slaves)==0]
+		if(length(unique(lengths(def_slaves)))>1) stop('Number of slaves are not equal for all masters. Double check input data.')
 
 		# order ref_data to make sure to define the correct pairing of starts and ends refpoint in a sequence.
 
@@ -152,6 +170,26 @@ estimate_sync<-function(source=NULL, ref_data=NULL, output_path=NULL,shooting_gr
 		 									 		}
 		 							new_ref	<- c(new_ref, tmp)	
 		 									}
+#######			{
+		 			# check that the files in the new reference point belongs all to the same group (i.e. shooting+cameraID+seq) 
+		 			# check performed on where the characters between path strings differ the earliest from the first path:
+		 			# if some path has a 
+		 			chars<-strsplit( rel_path[new_ref], split=NULL)
+							## test sample
+							# a<-paste0('a/b/c/f00',8:12); b<-paste0('a/b/c/f01',90:120);  ab<-c(a,b)
+				 			# chars<-strsplit( ab, split=NULL)
+		 			##	
+					invisible(difchr<-lapply(chars[-1], function(x){ #browser()
+						compar<-x==unlist(chars[1])
+						earl<-min(which(compar==F))
+						earl
+						})	
+					)
+					difchr<-unlist(difchr)
+					medn<-median(difchr)
+					dif_10percent<-sum(abs(difchr-medn)> max(lengths(chars)*0.1))
+					if(dif_10percent>0) stop('Some slave starting point is to far from its master. Double check starting points for slaves.')
+#######   		}
 		 			# initialize datafrem output using master dataframe as template						
 		 			out<- ord_ref_data_split[x][[1]]
 		 			out<-out[2:nrow(out),]
@@ -210,3 +248,14 @@ estimate_sync<-function(source=NULL, ref_data=NULL, output_path=NULL,shooting_gr
 # sequence='sequence'
 # ref_point='ref_point'
 # file_name='file_name'
+
+source='D:/2022-CSRF_urchin_kelp/imagery/QC-ile_blanche-mosaicing/NE_site/TL_1s' 
+output_path='./data/IAL-NE-image_sync-esitmated_ref.csv'
+ref_data=NE_ref_ann 
+shooting_group='shooting_group' 
+cameraID='cameraID' 
+camera_role='camera_role' 
+sequence='sequence' 
+ref_point='ref_point' 
+file_name='file_name'
+ img_extension='JPG'
