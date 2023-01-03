@@ -17,19 +17,20 @@
 #' @param interval interval used for subsampling. 
 #' @param dest absolute path to where the files need to be copied
 #' @param copy Logical. If TRUE (Default) it copies the subsampled files in the `dest` folder keeping the folder structure. If FALSE, only a .csv list of the subsampled files is saved in `dest`.
+#' @param ... pass arguments to [file.copy]
 #' 
 #' @details
 #' 
 #' The 'interval' at which frequency files are selected: if interval = 3 then the 3rd, 6th, 9th, 12th... are selected, along with the first and last file of the sequence. 
 #' 
-#' If  
+#'  
 #' 
 #' @author Filippo Ferrario, \email{filippo.f3rrario@gmail.com} 
 #' 
 #' @export
 
 
-img_subsample<-function(source=NULL, paired_synced=NULL, dest=NULL, interval=1, copy=TRUE, shooting_group='shooting_group' , cameraID='cameraID' , sequence='sequence')
+img_subsample<-function(source=NULL, paired_synced=NULL, dest=NULL, interval=1, copy=TRUE, shooting_group='shooting_group' , cameraID='cameraID' , sequence='sequence',...)
 {
 	# Check args
 		if (class(paired_synced)!='data.frame' | is.null(paired_synced)) stop('ref_data must be a data.frame')
@@ -83,7 +84,7 @@ img_subsample<-function(source=NULL, paired_synced=NULL, dest=NULL, interval=1, 
 		dirs<-sub(long$file_name, pattern='/[^/]+\\..{3}', replacement='')
 		dirs<-unique(dirs)
 		lapply(paste0(dest,'/',dirs), function(x) dir.create(x, recursive=TRUE))
-		file.copy(from=paste0(source,'/',long$file_name),to=paste0(dest,'/',long$file_name))
+		file.copy(from=paste0(source,'/',long$file_name),to=paste0(dest,'/',long$file_name),...)
 	}
 
 	sub_split_df
