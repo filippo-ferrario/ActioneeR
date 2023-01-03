@@ -12,7 +12,8 @@ img_subsample(
   copy = TRUE,
   shooting_group = "shooting_group",
   cameraID = "cameraID",
-  sequence = "sequence"
+  sequence = "sequence",
+  ...
 )
 }
 \arguments{
@@ -31,14 +32,14 @@ img_subsample(
 \item{cameraID}{name of the column in the dataset grouping the picture by camera}
 
 \item{sequence}{name of the column in the dataset grouping the images into a continuous sequence within the shooting session (e.g., a transect from start to end)}
+
+\item{...}{pass arguments to \link{file.copy}}
 }
 \description{
 Subsample a sequence of images by copying files at a specified interval
 }
 \details{
 The 'interval' at which frequency files are selected: if interval = 3 then the 3rd, 6th, 9th, 12th... are selected, along with the first and last file of the sequence.
-
-If
 }
 \author{
 Filippo Ferrario, \email{filippo.f3rrario@gmail.com}
