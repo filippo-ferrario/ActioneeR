@@ -101,7 +101,7 @@ imaging_strategy<-function(fov_L, dist, cam_spacing, min_camera_overlap=NULL, n_
 				(hlf_sw-c_hlf_sw)/cam_swath 
 		}
 	
-	# B) How much overlap between the swath of the camera at the distal end of the rig pointing towards the interior of the corridor AND the swath of the rig of the opposite passage (i.e., when both the rig swaths include the transect lines delmiting the corridor)
+	# B) How much overlap between the swath of the camera at the distal end of the rig pointing towards the interior of the corridor AND the swath of the rig of the opposite passage (i.e., when both the rig swaths include the transect lines delimiting the corridor)
 	#  calculate the distance between the 2 swaths centers
 	Dc1c2<- corridor_width - (2*Xswcnt) 	
 	empty<- Dc1c2-(2*hlf_sw)
