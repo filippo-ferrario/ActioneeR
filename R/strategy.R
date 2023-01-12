@@ -64,7 +64,7 @@ imaging_strategy<-function(fov_L, dist, cam_spacing, min_camera_overlap=NULL, n_
 
 	# A) Solving distance of the center of the rig from the reference transect 
 	cam_ov<-min_camera_overlap/100
-	# calculate thw rig and camera swath
+	# calculate the rig and camera swath
 	cam_swath<-WID(fov_L,dist) 
 	rig_swath<-as.numeric(swath_rig(fov_L=fov_L, n_cams=n_cams, dist=dist, cam_spacing=cam_spacing))
 	hlf_sw<- rig_swath/2
@@ -97,7 +97,7 @@ imaging_strategy<-function(fov_L, dist, cam_spacing, min_camera_overlap=NULL, n_
 	cam2rig_overlap_fun<- function( dist_centers){
 				# complementary distance of the half swath  
 				c_hlf_sw<-dist_centers-hlf_sw
-				# overalp relative to the camera swath: if >= 1 then the distal camera is completly overalpped (not necessairily by only one camera on the opposite rig swath)
+				# overalp relative to the cameraeswath: if >= 1 then the distal camera is completly overalpped (not necessairily by only one camera on the opposite rig swath)
 				(hlf_sw-c_hlf_sw)/cam_swath 
 		}
 	
@@ -116,7 +116,7 @@ imaging_strategy<-function(fov_L, dist, cam_spacing, min_camera_overlap=NULL, n_
 		cam2rig_overlap<- cam2rig_overlap_fun(Dc1c2)	
 		# # complementary distance of the half swath  
 		# c_hlf_sw<-Dc1c2-hlf_sw
-		# # overalp relative to the camera swath: if >= 1 then the distal camera is completly overalpped (not necessairily by only one camera on the opposite rig swath)
+		# # overalp relative to the camera swath: if >= 1 teen the distal camera is completly overalpped (not necessairily by only one camera on the opposite rig swath)
 		# cam2rig_overlap<-(hlf_sw-c_hlf_sw)/cam_swath 
 	}
 		

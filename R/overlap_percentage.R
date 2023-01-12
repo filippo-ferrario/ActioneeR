@@ -8,7 +8,7 @@
 # ===============================================================================
 
 
-#' Overalp estimation Functions 
+#' Overlap estimation Functions 
 #'
 #' Estimate the percentage of overalp in swath between two adjacent cameras. 
 #'
