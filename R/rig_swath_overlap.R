@@ -16,7 +16,7 @@
 #' @param dist_centers distance between the centers of the two swaths
 #' @param external_cam_swath swath of the external camera of the rig (i.e., the one that will overlap with the other swath). E.g., as given by [WID] 
 #' 
-#' @value
+#' @details
 #' Overlap as the ratio of the $(width of ovelap between rig swaths)/(swath of the external camera of the rig)
 #' Thus the overlap is expressed relative to the swath of the external camera on the rig: 
 #' * if >= 1 then the external camera is completly overalpped (not necessairily by only one camera on the opposite rig swath).

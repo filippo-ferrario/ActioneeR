@@ -17,3 +17,12 @@ rig_swaths_overlap(swath_width, dist_centers, external_cam_swath)
 Calculate the overlap between rig swaths at a given distance between swaths centers.
 The overlap is expressed relative to the swath of the external camera on the rig: if >= 1 then the external camera is completly overalpped (not necessairily by only one camera on the opposite rig swath).
 }
+\details{
+Overlap as the ratio of the $(width of ovelap between rig swaths)/(swath of the external camera of the rig)
+Thus the overlap is expressed relative to the swath of the external camera on the rig:
+\itemize{
+\item if >= 1 then the external camera is completly overalpped (not necessairily by only one camera on the opposite rig swath).
+\item if <0 then NA is returned because No overlap possible; a warning is given
+\item if 0< <=1 that is the proportion of the esternal camea to overlap with the other swath.
+}
+}
