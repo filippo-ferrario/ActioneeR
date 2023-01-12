@@ -2,7 +2,7 @@
 % Please edit documentation in R/overlap_percentage.R
 \name{overlap_pc_cam}
 \alias{overlap_pc_cam}
-\title{Overalp estimation Functions}
+\title{Overlap estimation Functions}
 \usage{
 overlap_pc_cam(fov_L, fov_R = fov_L, dist, cam_spacing)
 }
