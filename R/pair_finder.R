@@ -23,9 +23,9 @@
 #' 
 #' @author Filippo Ferrario, \email{filippo.f3rrario@gmail.com} 
 #' 
-#' @export
+# #' @export
 
-pair_finder<-function(source=NULL, main_img=NULL, img_format=c('png','jpg','gpr'), sync_ref=NULL, timeLapse=1,cleanTemp=T)
+pair_finder<-function(source=NULL, main_img=NULL, img_format=c('png','jpg','gpr'), sync_ref=NULL, cleanTemp=T)
 {
 	# set the option for subSecond decimals
 	# op<-options()
@@ -55,10 +55,10 @@ pair_finder<-function(source=NULL, main_img=NULL, img_format=c('png','jpg','gpr'
 
 	# Calclulate pairwise time difference between reference images 
 	reft<-meta[meta$FileName %in% sync_ref,]$SubSecCreateDate
-	names(reft)<-sync_ref
+	names(reft)<-meta[meta$FileName %in% sync_ref,]$FileName  #this line to ensure same order in names in the vector as opposed to assign names from sync_ref 
 	pairTdiff<-outer(reft,reft, FUN='-')
-	dimnames(pairTdiff)<-list(sync_ref,sync_ref)
-
+	# make order of columns and rows in the matrix to correspond to the order of sync_ref
+	pairTdiff<-pairTdiff[sync_ref,sync_ref]
 	# create a list of files dived by folder
 	list_dir<-split(meta, f=meta$Directory)
 	
@@ -68,26 +68,34 @@ pair_finder<-function(source=NULL, main_img=NULL, img_format=c('png','jpg','gpr'
 
 	# find in which folder is the main_img file to determine which are the folder where to look for files to be paired.
 	listID<-lapply(list_dir, function(x){ #browser()
-			sum(grepl(x$FileName, pattern=main_img))
+			sum(x$FileName==main_img)
 		}) 
 	lookDir<-which(listID==0)
+	nam_lookDir<-names(list_dir[lookDir])
 	refDir<-list_dir[-lookDir][[1]] 
+	nam_refDir<-names(list_dir[-lookDir])
 	# find the reference time
-	reftime<- refDir[grepl(refDir$FileName, pattern=main_img),]$SubSecCreateDate
+	reftime<- refDir[refDir$FileName==main_img,]$SubSecCreateDate
 
-	file2pair<-lapply(list_dir[lookDir], function(x){ browser()
-		dif<-abs(x$SubSecCreateDate-reftime)
+	file2pair<-lapply(list_dir[lookDir], function(x){ #browser()
+		colid<-grep(sync_ref, pattern=paste0(refDir$FileName,collapse='|') )
+		rowid<-grep(sync_ref, pattern=paste0(x$FileName,collapse='|') )
+		timePaired<-reftime+pairTdiff[rowid,colid]
+		dif<-abs(x$SubSecCreateDate-timePaired)
 		mindif<-min(dif)
-		if(mindif<=timeLapse) {
-			x$FileName[dif==mindif]
-			} else {
-			NA	
-			}
+		# if(mindif<=abs(pairTdiff[rowid,colid])) {
+		# 	x$FileName[dif==mindif]
+		# 	} else {
+		# 	NA	
+		# 	}
 
-		x[,c('FileName',grep(names(x), pattern='SubSec', value=T))]
+		x$FileName[dif==mindif]
 
-		x[dif==mindif,c('FileName',grep(names(x), pattern='SubSec', value=T))]
-		refDir[refDir$FileName==main_img,c('FileName',grep(names(x), pattern='SubSec', value=T))]
+
+		# x[,c('FileName',grep(names(x), pattern='SubSec', value=T))]
+
+		# x[dif==min(dif),c('FileName',grep(names(x), pattern='SubSec', value=T))]
+		# refDir[refDir$FileName==main_img,c('FileName',grep(names(x), pattern='SubSec', value=T))]
 
 
 		})
@@ -104,12 +112,18 @@ pair_finder<-function(source=NULL, main_img=NULL, img_format=c('png','jpg','gpr'
 # ------------
 
 source='C:/Users/ferrariof/Documents/2022-CSRF_urchin_kelp/imagery/QC-ile_blanche-mosaicing/SW_site/TL_1s/20220705-T60_0Rx-T42_0Rx'
-main_img='IAL-SW-20220705-T60_0Rx-T42_0Rx-lx-9_23-G0017610-99.JPG'
+main_img='IAL-SW-20220705-T60_0Rx-T42_0Rx-cx-9_4-G0013190-51.JPG'
 img_format=c('jpg')
-timeLapse=1
+sync_ref<-c('IAL-SW-20220705-T60_0Rx-T42_0Rx-lx-9_23-G0017613-102.JPG','IAL-SW-20220705-T60_0Rx-T42_0Rx-cx-9_4-G0013248-109.JPG','IAL-SW-20220705-T60_0Rx-T42_0Rx-rx-9_21-G0014117-106.JPG')
+# timeLapse=1
 cleanTemp=T
 
-sync_ref<-c('IAL-SW-20220705-T60_0Rx-T42_0Rx-lx-9_23-G0017613-102.JPG','IAL-SW-20220705-T60_0Rx-T42_0Rx-cx-9_4-G0013248-109.JPG','IAL-SW-20220705-T60_0Rx-T42_0Rx-rx-9_21-G0014117-106.JPG')
+
+sync_ref2<-c('IAL-SW-20220705-T60_0Rx-T42_0Rx-lx-9_23-G0017615-104.JPG','IAL-SW-20220705-T60_0Rx-T42_0Rx-cx-9_4-G0013250-111.JPG','IAL-SW-20220705-T60_0Rx-T42_0Rx-rx-9_21-G0014119-108.JPG')
+reft2<-meta[meta$FileName %in% sync_ref2,]$SubSecCreateDate
+	names(reft2)<-sync_ref2
+	pairTdiff2<-outer(reft2,reft2, FUN='-')
+
 
 # pair_finder( source='C:/Users/ferrariof/Documents/2022-CSRF_urchin_kelp/imagery/QC-ile_blanche-mosaicing/SW_site/TL_1s/20220705-T60_0Rx-T42_0Rx',
 # 			 main_img='IAL-SW-20220705-T60_0Rx-T42_0Rx-lx-9_23-G0017610-99.JPG',
