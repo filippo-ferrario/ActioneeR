@@ -51,17 +51,18 @@ sync_finder<-function(source=NULL, main_img=NULL, img_format=c('png','jpg','gpr'
 	stored<-file.exists(tempfile)
 	if (cleanTemp==T){
 		meta<-exiftoolr::exif_read(paste0(source,'/',flst))
-		meta<-meta[,c('FileName','Directory',grep(names(meta), pattern='SubSec', value=T))]
+		meta<-meta[,c('FileName','Directory',grep(names(meta), pattern='SubSec|Date', value=T))]
 		write.csv(meta, file=tempfile)
 	} else {
 		if(stored==F) stop("the temp file doesn't exist yet")
 		meta<-read.csv(tempfile)
 	}
-	
-	meta$SubSecCreateDate<-as.POSIXct(strptime(meta$SubSecCreateDate, format='%Y:%m:%d %H:%M:%OS')) # the time format is the match the one used in the dataframe created bt exitoolr
+	# Ensuring the existance of the time column to work on (for some reason the column meta$SubSecCreateDate does not always have values, but CreateDate and SubSecTime yes )
+	meta$SubSecCreateDateBCKP<-paste0(meta$CreateDate,'.',meta$SubSecTime)
+	meta$SubSecCreateDateBCKP<-as.POSIXct(strptime(meta$SubSecCreateDateBCKP, format='%Y:%m:%d %H:%M:%OS')) # the time format is the match the one used in the dataframe created bt exitoolr
 
 	# Calclulate pairwise time difference between reference images 
-	reft<-meta[meta$FileName %in% sync_ref,]$SubSecCreateDate
+	reft<-meta[meta$FileName %in% sync_ref,]$SubSecCreateDateBCKP
 	names(reft)<-meta[meta$FileName %in% sync_ref,]$FileName  #this line to ensure same order in names in the vector as opposed to assign names from sync_ref 
 	pairTdiff<-outer(reft,reft, FUN='-')
 	# make order of columns and rows in the matrix to correspond to the order of sync_ref
@@ -82,13 +83,13 @@ sync_finder<-function(source=NULL, main_img=NULL, img_format=c('png','jpg','gpr'
 	refDir<-list_dir[-lookDir][[1]] 
 	nam_refDir<-names(list_dir[-lookDir])
 	# find the reference time
-	reftime<- refDir[refDir$FileName==main_img,]$SubSecCreateDate
+	reftime<- refDir[refDir$FileName==main_img,]$SubSecCreateDateBCKP
 
 	file2pair<-lapply(list_dir[lookDir], function(x){ #browser()
 		colid<-which(sync_ref %in% refDir$FileName)
 		rowid<-which(sync_ref %in% x$FileName)
 		timePaired<-reftime+pairTdiff[rowid,colid]
-		dif<-abs(x$SubSecCreateDate-timePaired)
+		dif<-abs(x$SubSecCreateDateBCKP-timePaired)
 		mindif<-min(dif)
 		# x$FileName[dif==mindif]
 		# To avoid the problem of missing images at a give time point (e.g., in case a camera skipped taking some pics):
