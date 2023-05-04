@@ -70,7 +70,7 @@ imaging_strategy<-function(fov_L, dist, cam_spacing, min_camera_overlap=NULL, n_
 	hlf_sw<- rig_swath/2
 	
 	if (transect_pos=='side'){
-		# calclulate size of the frame corresponding to the overalp 
+		# calculate size of the frame corresponding to the overalp 
 		cam_ov_size<-cam_ov*cam_swath
 		# calculate distance of the transect from bord of the frame (the transect should lay in the middle of the overlap)
 		dist_transect<- cam_ov_size/2
