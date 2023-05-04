@@ -179,19 +179,22 @@ estimate_sync<-function(source=NULL, ref_data=NULL, output_path=NULL,shooting_gr
 		 									 		}
 		 							new_ref	<- c(new_ref, tmp)	
 		 									}
+
 #######
 					# check if for each reference point exist a picture
 					if(anyNA(fold_paths[new_ref])) stop(paste0('Some slave starting point is to far from its master: not enough pics for each sequence for camera ',names(folderID),'.\n Double check starting points for slaves.'))
 #######		 									
-		 			# initialize datafrem output using master dataframe as template						
+		 			# initialize dataframe output using master dataframe as template						
 		 			out<- ord_ref_data_split[x][[1]]
 		 			out<-out[2:nrow(out),]
 		 			# find files of reference points
-		 			ref_fls<-sapply(fold_paths[new_ref], function(x) {
+		 			ref_fls<-sapply(fold_paths[new_ref], function(x) { #browser()
 		 										j<-unlist(strsplit(x, split='/'))
 		 										j<-j[length(j)]
-		 										j<-unlist(strsplit(j, split='\\.'))
-		 										j[1]
+		 										# avoid problems due to litteral "." in the file name
+				 										# j<-unlist(strsplit(j, split='\\.')) # line existing until 2023-04-12
+				 										# j[1] # line existing until 2023-04-12
+		 										j<-gsub(j, pattern=paste0('\\.',tolower(img_extension),'|\\.',toupper(img_extension)),replacement='') # line existing since 2023-04-12
 		 										})
 
 		 			out[,file_name]<- ref_fls
