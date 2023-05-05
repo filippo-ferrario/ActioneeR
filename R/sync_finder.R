@@ -28,6 +28,15 @@
 #' 
 #' @author Filippo Ferrario, \email{filippo.f3rrario@gmail.com} 
 #' 
+#' @example
+#' 
+#' # sync_finder( source='F:/2022-CSRF_urchin_kelp/imagery/QC-ile_blanche-mosaicing/SW_site/TL_1s/20220705-T24_0Rx-T6_0Lx',
+#' #		 main_img='IAL-SW-20220705-T24_0Rx-T6_0Lx-cx-9_4-G0038825-27.JPG',
+#' #		 img_format='jpg',
+#' #		 timeLapse=1,
+#' #		 sync_ref=c('IAL-SW-20220705-T24_0Rx-T6_0Lx-lx-9_23-G0043218-33.JPG','IAL-SW-20220705-T24_0Rx-T6_0Lx-cx-9_4-G0038825-27.JPG','IAL-SW-20220705-T24_0Rx-T6_0Lx-rx-9_21-G0039694-22.JPG'),
+#' #		 cleanTemp=T)
+#' 
 #' @export
 
 
