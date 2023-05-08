@@ -30,7 +30,7 @@ pair_synced(
 
 \item{cameraID}{name of the column in the dataset grouping the picture by camera}
 
-\item{camera_role}{name of the column in the dataset specifying the role of the camera. That is 'master' for the camera used to retrive reference points, 'slave' for the other cameras that need to be synchronized with the 'master'}
+\item{camera_role}{name of the column in the dataset specifying the role of the camera. That is 'primary' for the camera used to retrive reference points, 'secondary' for the other cameras that need to be synchronized with the 'master'}
 
 \item{sequence}{name of the column in the dataset grouping the images into a continuous sequence within the shooting session (e.g., a transect from start to end)}
 

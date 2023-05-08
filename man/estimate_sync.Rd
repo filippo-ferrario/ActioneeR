@@ -33,7 +33,7 @@ estimate_sync(
 \arguments{
 \item{source}{absolute or relative path to the folder/drive where the subfolders with the image files of the individual cameras are stored.}
 
-\item{ref_data}{dataframe with information about reference points in the sequence for Master and initial ref points for slaves.}
+\item{ref_data}{dataframe with information about reference points in the sequence for primary camera and initial ref points for secondaries.}
 
 \item{output_path}{absolute or relative path to the output file (.csv). It must end with the file name}
 
@@ -41,7 +41,7 @@ estimate_sync(
 
 \item{cameraID}{name of the column in the dataset grouping the picture by camera}
 
-\item{camera_role}{name of the column in the dataset specifying the role of the camera. That is 'master' for the camera used to retrive reference points, 'slave' for the other cameras that need to be synchronized with the 'master'}
+\item{camera_role}{name of the column in the dataset specifying the role of the camera. That is 'primary' for the camera used to retrive reference points, 'secondary' for the other cameras that need to be synchronized with the 'master'}
 
 \item{sequence}{name of the column in the dataset grouping the images into a continuous sequence within the shooting session (e.g., a transect from start to end)}
 
@@ -49,7 +49,7 @@ estimate_sync(
 
 \item{file_name}{name of the column in the dataset specifying the file name of the image taken as reference point}
 
-\item{img_extension}{character specifying the file format of the images to use. DEFAUL to 'JPG'. it is case insensitive.}
+\item{img_extension}{character specifying the file format of the images to use. DEFAULT to 'JPG'. it is case insensitive.}
 }
 \description{
 Given a set of reference points in a sequence of images taken at regular intervals (i.e., the file name of an image corresponding to a known scene, such as the beginning or the end of a chunk of images of interest),
@@ -57,6 +57,10 @@ the function estimates the file name of corresponding images in a different imag
 
 Given a set of reference points in a sequence of images taken at regular intervals (i.e., the file name of an image corresponding to a known scene, such as the beginning or the end of a chunk of images of interest),
 the function estimates the file name of corresponding images in a different image sequence taken at the same regular interval.
+}
+\details{
+For compatibility with previuous versions the \code{camera_role} terminology can be 'master' and 'slave' for 'primary' and 'secondary' respectively.
+However these terms will be changed in the function and in its output to the 'primary' and 'secondary'.
 }
 \author{
 Filippo Ferrario, \email{filippo.f3rrario@gmail.com}
