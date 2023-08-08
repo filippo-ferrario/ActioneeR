@@ -66,12 +66,12 @@ estimate_sync<-function(source=NULL, ref_data=NULL, output_path=NULL,shooting_gr
 		ref_data$camera_role<- gsub(ref_data$camera_role, pattern='slave', replacement='secondary') 
 ########
 		comps<- strsplit(rel_path, split='/')
-		f<-unlist(lapply(comps ,function(x){ #browser()
+		fac<-unlist(lapply(comps ,function(x){ #browser()
 					comp<-x[-length(x)]
 					paste0(comp,collapse='/')
 					})
 		)
-		path_list<-split(rel_path, f=f)
+		path_list<-split(rel_path, f=fac)
 ########
 
 		# define combinations of masters and slaves
@@ -95,7 +95,7 @@ estimate_sync<-function(source=NULL, ref_data=NULL, output_path=NULL,shooting_gr
 										})
 		names(def_slaves)<-masters
 		def_slaves<-def_slaves[!lengths(def_slaves)==0]
-		if(length(unique(lengths(def_slaves)))>1) stop('Number of secondaries are not equal for all masters. Double check input data.')
+		if(length(unique(lengths(def_slaves)))>1) stop('Number of secondaries are not equal for all primaries. Double check input data.')
 
 		# order ref_data to make sure to define the correct pairing of starts and ends refpoint in a sequence.
 
@@ -124,9 +124,9 @@ estimate_sync<-function(source=NULL, ref_data=NULL, output_path=NULL,shooting_gr
 
 	
 		# find lengths of good and junk sequences
-		mst_seq_len<-mapply(x=mst_end_pathID,y=mst_start_pathID, function(x,y) x-y)
+		mst_seq_len<-mapply(x=mst_end_pathID,y=mst_start_pathID, SIMPLIFY=FALSE, function(x,y) x-y)
 
-		mst_junk_len<-mapply(x=mst_start_pathID,y=mst_end_pathID, function(x,y) { #browser()
+		mst_junk_len<-mapply(x=mst_start_pathID,y=mst_end_pathID, SIMPLIFY=FALSE, function(x,y) { #browser()
 															x<-x[-1]
 															y<-y[-length(y)]
 															jnk_len<-x-(y+1)
